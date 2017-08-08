@@ -133,12 +133,7 @@ render() {
     key={marker.id}
       coordinate={marker.latlng}
       title={marker.title}
-<<<<<<< HEAD
       image={marker.pic}
-=======
-      image={require('./assets/icons/app-icon.png')}
-
->>>>>>> fcd11c288fffb667891739398a71fcd626b51179
       description={marker.description}
     />
   ))}
