@@ -1,22 +1,40 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {AppRegistry,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Animated,
+  Image,
+  Dimensions,} from 'react-native';
 
 import MapView from 'react-native-maps';
+const Images = [
+  { uri: "https://i.imgur.com/sNam9iJ.jpg" },
+  { uri: "https://i.imgur.com/N7rlQYt.jpg" },
+  { uri: "https://i.imgur.com/UDrH0wm.jpg" },
+  { uri: "https://i.imgur.com/Ka8kNST.jpg" }
+]
+const { width, height } = Dimensions.get("window");
+
+const CARD_HEIGHT = height / 2;
+const CARD_WIDTH = CARD_HEIGHT - 50;
+
 var marker1={
-  id:0,
+          id:0,
           latlng:{ latitude: 2.945895,longitude: 101.870711},
           title:"University Of Nottingham",
           description:"The university Of nottingham in malaysia",
-          icon:"013-sun-umbrella.png",
+          icon:Images[0],
           pic: require('./assets/icons/png/013-sun-umbrella.png')
-
-}
-var marker2={
-   id:1,
+    }
+      
+    var marker2={
+           id:1,
           latlng:{ latitude: 2.917252,longitude:101.862546},
           title:"Tesco Seminyih",
           description:"The university Of nottingham in malaysia",
-          icon:"013-sun-umbrella.png",
+          icon:Images[1],
           pic: require('./assets/icons/png/002-shopping-cart.png')
 }
         var marker3={
@@ -24,11 +42,14 @@ var marker2={
           latlng:{ latitude:2.945869,longitude:101.852815},
           title:"Club",
           description:"The university Of nottingham in malaysia",
-          icon:"002-shopping-cart.png",
+          icon:Images[2],
           pic: require('./assets/icons/png/014-turntable.png')
         }
 
+
 export default class App extends React.Component {
+
+
 
 onRegionChange(region) {
   this.setState({ region });
@@ -37,32 +58,6 @@ onRegionChange(region) {
   }
   else {
     this.state.markers=[marker1,marker2,marker3]
-
-      //    {
-      //     id:0,
-      //     latlng:{ latitude: 2.945895,longitude: 101.870711},
-      //     title:"University Of Nottingham",
-      //     description:"The university Of nottingham in malaysia",
-      //     icon:"013-sun-umbrella.png",
-      //     pic: require('./assets/icons/png/013-sun-umbrella.png')
-      //    },
-      //   {
-      //     id:1,
-      //     latlng:{ latitude: 2.946447,longitude:101.875185},
-      //     title:"Tesco Seminyih",
-      //     description:"The university Of nottingham in malaysia",
-      //     icon:"013-sun-umbrella.png",
-      //     pic: require('./assets/icons/png/002-shopping-cart.png')
-      //    },
-      //    {
-      //     id:2,
-      //     latlng:{ latitude: 2.946390,longitude:101.869812},
-      //     title:"Club",
-      //     description:"The university Of nottingham in malaysia",
-      //     icon:"002-shopping-cart.png",
-      //     pic: require('./assets/icons/png/014-turntable.png')
-      //    },
-      //  ]
   }
 
 
@@ -87,22 +82,11 @@ onRegionChange(region) {
   };
 
 
-    // state =  {
-    //   region:{
-    //   latitude: 37.78825,
-    //   longitude: -122.4324,
-    //   latitudeDelta: 0.0922,
-    //   longitudeDelta: 0.0421,
-    // },
-    // mapStyle:[{"featureType":"all","elementType":"all","stylers":[{"lightness":"42"},{"visibility":"on"},{"hue":"#ff0000"},{"saturation":"-100"},{"gamma":"0.78"},{"weight":"0.37"},{"invert_lightness":true}]},{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#444444"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#3ec7c9"},{"visibility":"on"}]}]
-    // };
-
 render() {
   return (
      
     <View style={styles.container}>
      <MapView
-      rotateEnabled={false}
        showsUserLocation={true}
        showsCompass={false}
        style={styles.map}
@@ -119,8 +103,27 @@ render() {
       title={marker.title}
       image={marker.pic}
       description={marker.description}
-    />
+    >
+    <MapView.Callout>
+         <View style={styles.card}>
+              <Image
+                source={marker.icon}
+                style={styles.cardImage}
+                resizeMode="cover"
+              />
+              <View style={styles.textContent}>
+                <Text numberOfLines={1} style={styles.cardtitle}>{marker.title}</Text>
+                <Text numberOfLines={1} style={styles.cardDescription}>
+                  {marker.description}
+                </Text>
+              </View>
+            </View>
+    </MapView.Callout>
+    </MapView.Marker>
   ))}
+
+
+
        </MapView>
 
   </View>
@@ -150,5 +153,36 @@ const styles = StyleSheet.create({
     bottom:0,
     top:0,
     position:'absolute'
-  }
+  },
+  card: {
+    padding: 10,
+    elevation: 2,
+    backgroundColor: "#FFF",
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowRadius: 5,
+    shadowOpacity: 0.3,
+    shadowOffset: { x: 2, y: -2 },
+    height: CARD_HEIGHT,
+    width: CARD_WIDTH,
+    overflow: "hidden",
+  },
+  cardImage: {
+    flex: 3,
+    width: "100%",
+    height: "100%",
+    alignSelf: "center",
+  },
+  textContent: {
+    flex: 1,
+  },
+  cardtitle: {
+    fontSize: 12,
+    marginTop: 5,
+    fontWeight: "bold",
+  },
+  cardDescription: {
+    fontSize: 12,
+    color: "#444",
+  },
 });
