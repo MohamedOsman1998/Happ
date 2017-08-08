@@ -55,13 +55,14 @@ render() {
        style={styles.map}
        region={this.state.region}
        onRegionChange={this.onRegionChange}
-       customMapStyle={this.state.mapStyle}>
+       customMapStyle={this.state.mapStyle}
+       rotateEnabled={false}>
        
          {this.state.markers.map(marker => (
     <MapView.Marker
       coordinate={marker.latlng}
       title={marker.title}
-      image={require('../assets/icons/app-icon.png')}
+      image={require('./assets/icons/app-icon.png')}
 
       description={marker.description}
     />
