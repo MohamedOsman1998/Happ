@@ -124,7 +124,8 @@ render() {
        style={styles.map}
        region={this.state.region}
        onRegionChange={this.onRegionChange}
-       customMapStyle={this.state.mapStyle}>
+       customMapStyle={this.state.mapStyle}
+       rotateEnabled={false}>
        
          {this.state.markers.map(marker => (
 
@@ -132,7 +133,12 @@ render() {
     key={marker.id}
       coordinate={marker.latlng}
       title={marker.title}
+<<<<<<< HEAD
       image={marker.pic}
+=======
+      image={require('./assets/icons/app-icon.png')}
+
+>>>>>>> fcd11c288fffb667891739398a71fcd626b51179
       description={marker.description}
     />
   ))}
