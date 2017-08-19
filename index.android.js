@@ -14,6 +14,7 @@ import {
   Text,
   View,
   Image,
+  TouchableOpacity,
   Dimensions
 } from 'react-native';
 
@@ -86,7 +87,6 @@ export default class App extends React.Component {
     super(props);
     let d = new Date;
     var isDay = d.getHours() > 6 && d.getHours() < 18;
-    isDay = true
     this.state = {
       searchIcon: isDay
         ? require('./assets/icons/png/001-magnifying-glass.png')
@@ -102,7 +102,7 @@ export default class App extends React.Component {
         : nightStyle,
       markers: [marker1, marker2, marker3]
     };
-
+    this.rouletteItemDim = 40;
     this.onRegionChange = this
       .onRegionChange
       .bind(this);
@@ -114,7 +114,11 @@ export default class App extends React.Component {
     return (
 
       <View style={styles.container}>
-        <MapView
+
+        <TouchableOpacity style={styles.searchIconWrapper} >
+          <Image style={styles.searchIcon} source={this.state.searchIcon}/>
+        </TouchableOpacity>
+         <MapView
           showsUserLocation={true}
           showsCompass={false}
           style={styles.map}
@@ -129,60 +133,69 @@ export default class App extends React.Component {
             .map(marker => (
 
               <MapView.Marker //TODO: create custom view for marker to make the width and height consistent on all resolutions
-                key={marker.id}
-                coordinate={marker.latlng}
-                title={marker.title}
-                image={marker.pic}
-                description={marker.description}>
+  key={marker.id} coordinate={marker.latlng} title={marker.title} image={marker.pic} description={marker.description}>
                 <MapView.Callout>
                   <CustomCallout marker={marker}/>
                 </MapView.Callout>
               </MapView.Marker>
             ))}
-        </MapView>
-        <Image source={this.state.searchIcon} style={styles.searchIcon}/>
+        </MapView> 
 
         <Roulette
-          customStyle={styles.roulette}
+          customStyle={{
+          position: 'absolute',
+          bottom: -100,
+          backgroundColor: '#2980b9'
+        }}
+          customCenterStyle={{
+          backgroundColor: "#16a085"
+        }}
           rouletteRotate={50}
           enableUserRotate
+          radius={200}
+          distance={60}
           onRotate={(props) => console.log(props)}>
-          <Image
-            ref="icon"
-            style={{
-            width: 50,
-            height: 50
-          }}
-            source={this.state.searchIcon}
-            title="TAPBOO"/>
-          <View>
+          <TouchableOpacity onPress={() => {}}>
             <Image
               ref="icon"
               style={{
-              width: 50,
-              height: 50
+              width: this.rouletteItemDim,
+              height: this.rouletteItemDim
             }}
               source={this.state.searchIcon}
               title="TAPBOO"/>
-          </View>
-          <Image
-            ref="icon"
-            style={{
-            width: 50,
-            height: 50
-          }}
-            source={this.state.searchIcon}
-            title="TAPBOO"/>
-          <View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {}}>
             <Image
               ref="icon"
               style={{
-              width: 50,
-              height: 50
+              width: this.rouletteItemDim,
+              height: this.rouletteItemDim
             }}
               source={this.state.searchIcon}
               title="TAPBOO"/>
-          </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {}}>
+            <Image
+              ref="icon"
+              style={{
+              width: this.rouletteItemDim,
+              height: this.rouletteItemDim
+            }}
+              source={this.state.searchIcon}
+              title="TAPBOO"/>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {}}>
+            <Image
+              ref="icon"
+              style={{
+              width: this.rouletteItemDim,
+              height: this.rouletteItemDim
+            }}
+              source={this.state.searchIcon}
+              title="TAPBOO"/>
+          </TouchableOpacity>
+
         </Roulette>
       </View>
     );
@@ -247,20 +260,20 @@ const styles = StyleSheet.create({
     width: CARD_WIDTH,
     overflow: "hidden"
   },
-  searchIcon: {
+  searchIconWrapper: {
     position: 'absolute',
     right: 12,
     width: 50,
     height: 50,
     top: 20,
-    zIndex: 10
+    zIndex:10
+  },
+  searchIcon:{
+    width: 50,
+    height: 50,
   },
   roulette: {
-    // position: 'absolute',
-    // width: 50,
-    // height: 50,
-    // bottom: 50,
-    // zIndex: 10
+    // position: 'absolute', width: 50, height: 50, bottom: 50, zIndex: 10
   },
   cardImage: {
     flex: 3,
