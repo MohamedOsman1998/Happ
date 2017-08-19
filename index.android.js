@@ -6,7 +6,7 @@
 
 import React, {Component} from 'react';
 
-import Roulette from 'react-native-roulette';
+import Roulette from './Roulette';
 
 import {
   AppRegistry,
