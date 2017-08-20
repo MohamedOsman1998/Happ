@@ -71,16 +71,6 @@ var marker3 = {
 }
 
 export default class App extends React.Component {
-  onRegionChange(region) {
-    if (region.latitudeDelta > 0.2) {
-      this.state.markers = [marker1, marker2]
-    } else {
-      this.state.markers = [marker1, marker2, marker3]
-    }
-
-    this.setState({region});
-
-  }
 
   constructor(props) {
 
@@ -108,6 +98,15 @@ export default class App extends React.Component {
       .bind(this);
 
   };
+    
+  onRegionChange(region) {
+    if (region.latitudeDelta > 0.2) {
+      this.state.markers = [marker1, marker2]
+    } else {
+      this.state.markers = [marker1, marker2, marker3]
+    }
+    this.setState({region});
+  }
   async componentDidMount() {}
 
   render() {
@@ -115,11 +114,10 @@ export default class App extends React.Component {
 
       <View style={styles.container}>
 
-        <TouchableOpacity style={styles.searchIconWrapper} >
+        <TouchableOpacity style={styles.searchIconWrapper}>
           <Image style={styles.searchIcon} source={this.state.searchIcon}/>
         </TouchableOpacity>
-         <MapView
-          showsUserLocation={true}
+        <MapView
           showsCompass={false}
           style={styles.map}
           region={this.state.region}
@@ -139,7 +137,7 @@ export default class App extends React.Component {
                 </MapView.Callout>
               </MapView.Marker>
             ))}
-        </MapView> 
+        </MapView>
 
         <Roulette
           customStyle={{
@@ -185,7 +183,7 @@ export default class App extends React.Component {
               source={this.state.markers[1].pic}
               title="TAPBOO"/>
           </TouchableOpacity>
-            <TouchableOpacity onPress={() => {}}>
+          {/* <TouchableOpacity onPress={() => {console.log("test")}}>
             <Image
               ref="icon"
               style={{
@@ -194,7 +192,7 @@ export default class App extends React.Component {
             }}
               source={this.state.markers[2].pic}
               title="TAPBOO"/>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </Roulette>
       </View>
     );
@@ -265,11 +263,11 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     top: 20,
-    zIndex:10
+    zIndex: 10
   },
-  searchIcon:{
+  searchIcon: {
     width: 50,
-    height: 50,
+    height: 50
   },
   roulette: {
     // position: 'absolute', width: 50, height: 50, bottom: 50, zIndex: 10

@@ -26,12 +26,6 @@ import RouletteItem from './RouletteItem';
       onMoveShouldSetResponderCapture: () => true,
       onMoveShouldSetPanResponderCapture: () => true,
       onPanResponderMove: (n, arg) => {
-        // if(this.gestureVars.gestureActive==true){
-        //   this.gestureVars.gestureActive==false;
-        //   this.gestureVars.gestureOffset=arg.moveX
-        //   console.log(this)
-        // }
-
         arg.moveX= (this.gestureVars.gestureOffset +arg.moveX)/(width/2) //TODO:change to a value that depends on teh screen
         animationFun(n, arg)
       },
@@ -41,32 +35,36 @@ import RouletteItem from './RouletteItem';
         console.log("grans")
           const {children} = this.props;
 
-          let prevActiveItem=this.state.activeItem-1<1?children.length:this.state.activeItem-1;
-          this.gestureVars.gestureOffset=prevActiveItem*width/2-gestureState.moveX
+          // let prevActiveItem=this.state.activeItem-1<1?children.length:this.state.activeItem-1;
+
+          // this.gestureVars.gestureOffset=prevActiveItem*width/2-gestureState.moveX
+          this.gestureVars.gestureOffset=this.state._animatedValue._value*width/2-gestureState.moveX;
+          this.state._animatedValue.stopAnimation()
           
-          console.log(this,width)
+          // console.log(this,width)
       },
       onPanResponderRelease: () => {
         const {enableUserRotate, handlerOfRotate} = this.props;
 
         if (enableUserRotate) {
           const {children} = this.props;
-          const {activeItem} = this.state;
-          const nextItem = activeItem + 10;// no need to do  this.state._animatedValue+10 coz its set in teh onPanResponderMove
-
+          const {activeItem} = this.state;//dont need activeItem anymore
+          const nextItem = Math.round(this.state._animatedValue._value) + 20;
+          
           // this
           //   .state//becoz it might be out of range becoz of prev anim 
           //   ._animatedValue
           //   .setValue(activeItem);
           Animated.timing(this.state._animatedValue, {
             toValue: nextItem,
-            easing: Easing.exp,
+            duration:5000,
+            easing: Easing.out(Easing.exp),
             //  useNativeDriver: true, //try this
           },).start();
 
           const newActiveItem = (nextItem % children.length)+1
 
-          console.log(newActiveItem)
+          // console.log(newActiveItem)
 
           this.setState({
             activeItem: newActiveItem
