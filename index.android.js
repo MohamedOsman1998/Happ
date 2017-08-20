@@ -172,7 +172,7 @@ export default class App extends React.Component {
               width: this.rouletteItemDim,
               height: this.rouletteItemDim
             }}
-              source={this.state.searchIcon}
+              source={this.state.markers[0].pic}
               title="TAPBOO"/>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {}}>
@@ -182,20 +182,19 @@ export default class App extends React.Component {
               width: this.rouletteItemDim,
               height: this.rouletteItemDim
             }}
-              source={this.state.searchIcon}
+              source={this.state.markers[1].pic}
               title="TAPBOO"/>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => {}}>
             <Image
               ref="icon"
               style={{
               width: this.rouletteItemDim,
               height: this.rouletteItemDim
             }}
-              source={this.state.searchIcon}
+              source={this.state.markers[2].pic}
               title="TAPBOO"/>
           </TouchableOpacity>
-
         </Roulette>
       </View>
     );
