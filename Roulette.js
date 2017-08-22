@@ -43,13 +43,13 @@ import RouletteItem from './RouletteItem';
           
           // console.log(this,width)
       },
-      onPanResponderRelease: () => {
+      onPanResponderRelease: (evt, gestureState) => {
         const {enableUserRotate, handlerOfRotate} = this.props;
-
+        console.log(gestureState,gestureState.vx);
         if (enableUserRotate) {
           const {children} = this.props;
           const {activeItem} = this.state;//dont need activeItem anymore
-          const nextItem = Math.round(this.state._animatedValue._value) + 20;
+          const nextItem = Math.round(this.state._animatedValue._value) + 20;//make this dependant on velocity and do direction and ignore small dx's
           
           // this
           //   .state//becoz it might be out of range becoz of prev anim 
