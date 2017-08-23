@@ -4,7 +4,7 @@
  * @flow
  */
 
-import React, {Component} from 'react';
+import React, {Component,PureComponent} from 'react';
 
 import Roulette from './Roulette';
 
@@ -13,12 +13,15 @@ import {
   StyleSheet,
   Text,
   View,
+  VirtualizedList,
   Image,
   TouchableOpacity,
   Dimensions
 } from 'react-native';
 
+
 import MapView from 'react-native-maps';
+import Flag from './Flag.js'
 const Images = [
   {
     uri: "https://i.imgur.com/sNam9iJ.jpg"
@@ -29,6 +32,33 @@ const Images = [
   }, {
     uri: "https://i.imgur.com/Ka8kNST.jpg"
   }
+]
+const countryList=[
+  "dominica",
+ "dominican-republic",
+  "east-timor",
+  'ecuador',
+  'egypt',
+  'england',
+  'equatorial-guinea',
+  'eritrsea',
+  'estonia',
+  'ethiopia',
+  'european-union',
+  'falkland-islands',
+  'faroe-islands',
+  'fiji',
+  'finland',
+  'france',
+  'french-polynesia',
+  'gabon',
+  'galapagos-islands',
+  'gambia',
+  'georgia',
+  'germany',
+  'ghana',
+  'gibraltar',
+  'greece',
 ]
 const {width, height} = Dimensions.get("window");
 
@@ -85,6 +115,7 @@ export default class App extends React.Component {
     super(props);
     let d = new Date;
     var isDay = d.getHours() > 6 && d.getHours() < 18;
+    isDay=true;
     this.state = {
       searchIcon: isDay
         ? require('./assets/icons/png/001-magnifying-glass.png')
@@ -147,7 +178,10 @@ export default class App extends React.Component {
               </MapView.Marker>
             ))}
         </MapView>
-        <View
+
+          <LoopingListView countryList={countryList}/>
+
+        <View  //Roulette Border
           style={{
           position: 'absolute',
           bottom: -127.5,
@@ -169,7 +203,7 @@ export default class App extends React.Component {
           height: 100,
           backgroundColor: "#333232"
         }}
-          rouletteRotate={50}
+          rouletteRotate={30}
           enableUserRotate
           radius={200}
           distance={73}
@@ -190,14 +224,15 @@ export default class App extends React.Component {
             ))}
 
         </Roulette>
+
         <Image
-            source={require('./assets/icons/png/selector.png')}
-            style={{
-            width: 43,
-            height:43,
-            position:'absolute',
-            bottom:0
-          }}/>
+          source={require('./assets/icons/png/selector.png')}
+          style={{
+          width: 43,
+          height: 43,
+          position: 'absolute',
+          bottom: 0
+        }}/>
       </View>
     );
   }
@@ -230,6 +265,60 @@ class CustomCallout extends React.Component {
     )
   }
 }
+class DataSource {
+  getElementAtIndex (index) {
+    return { key: index }
+  }
+}
+
+const data = new DataSource()
+class LoopingListView extends React.Component{
+  constructor(props){
+    super(props)
+    this.props=props;
+
+  }
+   getItem (data, index) {
+    return data.getElementAtIndex(index)
+  }
+  
+   getItemCount (data) {
+    return 1000
+  }
+  
+render(){
+
+  return (
+    <VirtualizedList
+        data={data}
+        style={{left:-154,width:50}}
+        // initialNumToRender={20}
+        // maxToRenderPerBatch={}
+         windowSize={21}
+        getItemCount={this.getItemCount}
+        getItem={this.getItem}
+        keyExtractor={(item, index) => {
+          return item.key
+        }}
+        renderItem={({ item, index }) => {
+          return (
+            
+            <TouchableOpacity>
+            <View  //Roulette Border
+          style={styles.countryList}>
+               <Flag
+                 code={this.props.countryList[index%this.props.countryList.length]}
+                 size={42}
+               />
+               </View>
+            </TouchableOpacity>
+
+          )
+        }}
+      />
+  )
+}
+} 
 
 const styles = StyleSheet.create({
   container: {
@@ -245,6 +334,15 @@ const styles = StyleSheet.create({
     top: 0,
     position: 'absolute'
   },
+  countryList:
+    {
+      width: 50,
+      backgroundColor:'rgba(236, 240, 241,0.69)',
+      height: 50,
+      borderRadius: 5,
+      borderWidth: 4,
+      borderColor: '#333232'
+    },
   card: {
     padding: 10,
     elevation: 2,
@@ -266,7 +364,7 @@ const styles = StyleSheet.create({
     right: 12,
     width: 50,
     height: 50,
-    top: 20,
+    top: 12,
     zIndex: 10
   },
   searchIcon: {
@@ -295,203 +393,204 @@ const styles = StyleSheet.create({
     color: "#444"
   }
 });
-const dayStyle1 = [
-  {
-    "featureType": "administrative",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#6195a0"
-      }
-    ]
-  }, {
-    "featureType": "administrative.province",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  }, {
-    "featureType": "landscape",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "lightness": "0"
-      }, {
-        "saturation": "0"
-      }, {
-        "color": "#f5f5f2"
-      }, {
-        "gamma": "1"
-      }
-    ]
-  }, {
-    "featureType": "landscape.man_made",
-    "elementType": "all",
-    "stylers": [
-      {
-        "lightness": "-3"
-      }, {
-        "gamma": "1.00"
-      }
-    ]
-  }, {
-    "featureType": "landscape.natural.terrain",
-    "elementType": "all",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  }, {
-    "featureType": "poi",
-    "elementType": "all",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  }, {
-    "featureType": "poi.park",
-    "elementType": "geometry.fill",
-    "stylers": [
-      {
-        "color": "#bae5ce"
-      }, {
-        "visibility": "on"
-      }
-    ]
-  }, {
-    "featureType": "road",
-    "elementType": "all",
-    "stylers": [
-      {
-        "saturation": -100
-      }, {
-        "lightness": 45
-      }, {
-        "visibility": "simplified"
-      }
-    ]
-  }, {
-    "featureType": "road.highway",
-    "elementType": "all",
-    "stylers": [
-      {
-        "visibility": "simplified"
-      }
-    ]
-  }, {
-    "featureType": "road.highway",
-    "elementType": "geometry.fill",
-    "stylers": [
-      {
-        "color": "#fac9a9"
-      }, {
-        "visibility": "simplified"
-      }
-    ]
-  }, {
-    "featureType": "road.highway",
-    "elementType": "labels.text",
-    "stylers": [
-      {
-        "color": "#4e4e4e"
-      }
-    ]
-  }, {
-    "featureType": "road.arterial",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#787878"
-      }
-    ]
-  }, {
-    "featureType": "road.arterial",
-    "elementType": "labels.icon",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  }, {
-    "featureType": "transit",
-    "elementType": "all",
-    "stylers": [
-      {
-        "visibility": "simplified"
-      }
-    ]
-  }, {
-    "featureType": "transit.station.airport",
-    "elementType": "labels.icon",
-    "stylers": [
-      {
-        "hue": "#0a00ff"
-      }, {
-        "saturation": "-77"
-      }, {
-        "gamma": "0.57"
-      }, {
-        "lightness": "0"
-      }
-    ]
-  }, {
-    "featureType": "transit.station.rail",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#43321e"
-      }
-    ]
-  }, {
-    "featureType": "transit.station.rail",
-    "elementType": "labels.icon",
-    "stylers": [
-      {
-        "hue": "#ff6c00"
-      }, {
-        "lightness": "4"
-      }, {
-        "gamma": "0.75"
-      }, {
-        "saturation": "-68"
-      }
-    ]
-  }, {
-    "featureType": "water",
-    "elementType": "all",
-    "stylers": [
-      {
-        "color": "#eaf6f8"
-      }, {
-        "visibility": "on"
-      }
-    ]
-  }, {
-    "featureType": "water",
-    "elementType": "geometry.fill",
-    "stylers": [
-      {
-        "color": "#c7eced"
-      }
-    ]
-  }, {
-    "featureType": "water",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "lightness": "-49"
-      }, {
-        "saturation": "-53"
-      }, {
-        "gamma": "0.79"
-      }
-    ]
-  }
-]
+
+// const dayStyle1 = [
+//   {
+//     "featureType": "administrative",
+//     "elementType": "labels.text.fill",
+//     "stylers": [
+//       {
+//         "color": "#6195a0"
+//       }
+//     ]
+//   }, {
+//     "featureType": "administrative.province",
+//     "elementType": "geometry.stroke",
+//     "stylers": [
+//       {
+//         "visibility": "off"
+//       }
+//     ]
+//   }, {
+//     "featureType": "landscape",
+//     "elementType": "geometry",
+//     "stylers": [
+//       {
+//         "lightness": "0"
+//       }, {
+//         "saturation": "0"
+//       }, {
+//         "color": "#f5f5f2"
+//       }, {
+//         "gamma": "1"
+//       }
+//     ]
+//   }, {
+//     "featureType": "landscape.man_made",
+//     "elementType": "all",
+//     "stylers": [
+//       {
+//         "lightness": "-3"
+//       }, {
+//         "gamma": "1.00"
+//       }
+//     ]
+//   }, {
+//     "featureType": "landscape.natural.terrain",
+//     "elementType": "all",
+//     "stylers": [
+//       {
+//         "visibility": "off"
+//       }
+//     ]
+//   }, {
+//     "featureType": "poi",
+//     "elementType": "all",
+//     "stylers": [
+//       {
+//         "visibility": "off"
+//       }
+//     ]
+//   }, {
+//     "featureType": "poi.park",
+//     "elementType": "geometry.fill",
+//     "stylers": [
+//       {
+//         "color": "#bae5ce"
+//       }, {
+//         "visibility": "on"
+//       }
+//     ]
+//   }, {
+//     "featureType": "road",
+//     "elementType": "all",
+//     "stylers": [
+//       {
+//         "saturation": -100
+//       }, {
+//         "lightness": 45
+//       }, {
+//         "visibility": "simplified"
+//       }
+//     ]
+//   }, {
+//     "featureType": "road.highway",
+//     "elementType": "all",
+//     "stylers": [
+//       {
+//         "visibility": "simplified"
+//       }
+//     ]
+//   }, {
+//     "featureType": "road.highway",
+//     "elementType": "geometry.fill",
+//     "stylers": [
+//       {
+//         "color": "#fac9a9"
+//       }, {
+//         "visibility": "simplified"
+//       }
+//     ]
+//   }, {
+//     "featureType": "road.highway",
+//     "elementType": "labels.text",
+//     "stylers": [
+//       {
+//         "color": "#4e4e4e"
+//       }
+//     ]
+//   }, {
+//     "featureType": "road.arterial",
+//     "elementType": "labels.text.fill",
+//     "stylers": [
+//       {
+//         "color": "#787878"
+//       }
+//     ]
+//   }, {
+//     "featureType": "road.arterial",
+//     "elementType": "labels.icon",
+//     "stylers": [
+//       {
+//         "visibility": "off"
+//       }
+//     ]
+//   }, {
+//     "featureType": "transit",
+//     "elementType": "all",
+//     "stylers": [
+//       {
+//         "visibility": "simplified"
+//       }
+//     ]
+//   }, {
+//     "featureType": "transit.station.airport",
+//     "elementType": "labels.icon",
+//     "stylers": [
+//       {
+//         "hue": "#0a00ff"
+//       }, {
+//         "saturation": "-77"
+//       }, {
+//         "gamma": "0.57"
+//       }, {
+//         "lightness": "0"
+//       }
+//     ]
+//   }, {
+//     "featureType": "transit.station.rail",
+//     "elementType": "labels.text.fill",
+//     "stylers": [
+//       {
+//         "color": "#43321e"
+//       }
+//     ]
+//   }, {
+//     "featureType": "transit.station.rail",
+//     "elementType": "labels.icon",
+//     "stylers": [
+//       {
+//         "hue": "#ff6c00"
+//       }, {
+//         "lightness": "4"
+//       }, {
+//         "gamma": "0.75"
+//       }, {
+//         "saturation": "-68"
+//       }
+//     ]
+//   }, {
+//     "featureType": "water",
+//     "elementType": "all",
+//     "stylers": [
+//       {
+//         "color": "#eaf6f8"
+//       }, {
+//         "visibility": "on"
+//       }
+//     ]
+//   }, {
+//     "featureType": "water",
+//     "elementType": "geometry.fill",
+//     "stylers": [
+//       {
+//         "color": "#c7eced"
+//       }
+//     ]
+//   }, {
+//     "featureType": "water",
+//     "elementType": "labels.text.fill",
+//     "stylers": [
+//       {
+//         "lightness": "-49"
+//       }, {
+//         "saturation": "-53"
+//       }, {
+//         "gamma": "0.79"
+//       }
+//     ]
+//   }
+// ]
 const dayStyle = [
   {
     "featureType": "all",
