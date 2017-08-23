@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { Image } from 'react-native';
 import * as flags from './flags';
 
@@ -8,17 +8,26 @@ import * as flags from './flags';
 //   type?: 'flat' | 'shiny',
 //   style?: any,
 // };
-
-const Flag = ({ size = 64, code, type = 'shiny', style }) => {
-  const flag = flags['png']['flags'][code]
-  const unknownFlag = flags['png']['flags']['unknown'];
-  console.log(flags['png']['flags']['yemen'])
-  return (
+class Flag extends React.Component{
+  componentWillUpdate(){
+    console.log("flagsUpdate")
+  }
+  shouldComponentUpdate(){
+    return false;
+  }
+  render(){
+    var { size, code, type, style }=this.props
+     const flag = flags['png']['flags'][code]
+     const unknownFlag = flags['png']['flags']['unknown'];
+    return(
     <Image
       source={flag || unknownFlag}
       style={[{ width: size, height: size }, style]}
     />
-  );
-};
 
+    )
+  }
+
+
+}
 export default Flag;

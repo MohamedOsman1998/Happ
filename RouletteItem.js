@@ -10,6 +10,9 @@ class RouletteItem extends Component {
       coordY: props.radius
     };
   }
+  componentWillUpdate(){
+    console.log("rouletteItemUpdated")
+  }
 
   getCoordinates({ width, height }) {
     const { radius, index, step, distance } = this.props;
@@ -26,6 +29,8 @@ class RouletteItem extends Component {
 
     return (
       <View
+            renderToHardwareTextureAndroid={true}
+      shouldRasterizeIOS={true}
         style={{ position: 'absolute', left: coordX, top: coordY, transform: [{ rotate: `${-rouletteRotate}deg` }] }}
         onLayout={(event) => this.getCoordinates(event.nativeEvent.layout)}
       >

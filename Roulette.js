@@ -59,7 +59,7 @@ import RouletteItem from './RouletteItem';
             toValue: nextItem,
             duration:5000,
             easing: Easing.out(Easing.exp),
-            //  useNativeDriver: true, //try this
+             useNativeDriver: true, //try this
           },).start();
 
           const newActiveItem = (nextItem % children.length)+1
@@ -72,6 +72,12 @@ import RouletteItem from './RouletteItem';
         }
       }
     });
+  }
+  componentWillUpdate(){
+    console.log("rouletteUpdated")
+  }
+  shouldComponentUpdate(){
+    return false;
   }
 
   getCenterCoordinates({x, y, width, height}) {
@@ -120,6 +126,8 @@ import RouletteItem from './RouletteItem';
 
     return (
       <Animated.View
+      renderToHardwareTextureAndroid={true}
+      shouldRasterizeIOS={true}
         {...this.panResponder.panHandlers}
         style={[
         styles.container, {

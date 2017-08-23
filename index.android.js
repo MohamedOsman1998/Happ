@@ -4,8 +4,7 @@
  * @flow
  */
 
-import React, {Component,PureComponent} from 'react';
-
+import React, {Component} from 'react';
 import Roulette from './Roulette';
 
 import {
@@ -22,15 +21,18 @@ import {
 
 import MapView from 'react-native-maps';
 import Flag from './Flag.js'
+
+
+
 const Images = [
   {
-    uri: "https://i.imgur.com/sNam9iJ.jpg"
+    uri: "http://www.customwebsitevideo.com/images/prosbo_hires.jpg"
   }, {
-    uri: "https://i.imgur.com/N7rlQYt.jpg"
+    uri: "https://upload.wikimedia.org/wikipedia/commons/3/31/Small_rhombicosidodecahedron.png"
   }, {
-    uri: "https://i.imgur.com/UDrH0wm.jpg"
+    uri: "http://www.kiplinger.com/quiz/business/T049-S001-test-your-start-up-know-how/images/all-small-businesses-have-to-be-incorporated1.jpg"
   }, {
-    uri: "https://i.imgur.com/Ka8kNST.jpg"
+    uri: "http://www.customwebsitevideo.com/images/prosbo_hires.jpg"
   }
 ]
 const countryList=[
@@ -82,7 +84,6 @@ var marker1 = {
   title: "University Of Nottingham",
   description: "The university Of nottingham in malaysia",
   icon: Images[0],
-  pic: require('./assets/icons/png/013-sun-umbrella.png')
 }
 
 var marker2 = {
@@ -94,7 +95,6 @@ var marker2 = {
   title: "Tesco Seminyih",
   description: "The university Of nottingham in malaysia",
   icon: Images[1],
-  pic: require('./assets/icons/png/002-shopping-cart.png')
 }
 var marker3 = {
   id: 2,
@@ -105,7 +105,6 @@ var marker3 = {
   title: "Club",
   description: "The university Of nottingham in malaysia",
   icon: Images[2],
-  pic: require('./assets/icons/png/014-turntable.png')
 }
 
 export default class App extends React.Component {
@@ -131,7 +130,6 @@ export default class App extends React.Component {
         : nightStyle,
       markers: [marker1, marker2, marker3]
     };
-    this.rouletteItemDim = 40;
     this.onRegionChange = this
       .onRegionChange
       .bind(this);
@@ -140,9 +138,9 @@ export default class App extends React.Component {
 
   onRegionChange(region) {
     if (region.latitudeDelta > 0.2) {
-      this.state.markers = [marker1, marker2]
+      this.setState({markers:[marker1, marker2]}) 
     } else {
-      this.state.markers = [marker1, marker2, marker3]
+      this.setState({markers:[marker1, marker2,marker3]}) 
     }
     this.setState({region});
   }
@@ -168,10 +166,11 @@ export default class App extends React.Component {
           {this
             .state
             .markers
-            .map(marker => (
+            .map((marker,id) => (
 
               <MapView.Marker //TODO: create custom view for marker to make the width and height consistent on all resolutions
-  key={marker.id} coordinate={marker.latlng} title={marker.title} image={marker.pic} description={marker.description}>
+                key={marker.id} coordinate={marker.latlng} title={marker.title}  description={marker.description}>
+                <Image ref="icon" source={id?tetrisBlocks.z:tetrisBlocks.b}style={{width:40,height:40}}/>
                 <MapView.Callout>
                   <CustomCallout marker={marker}/>
                 </MapView.Callout>
@@ -179,30 +178,16 @@ export default class App extends React.Component {
             ))}
         </MapView>
 
+          <View style={styles.square} />
           <LoopingListView countryList={countryList}/>
 
+
         <View  //Roulette Border
-          style={{
-          position: 'absolute',
-          bottom: -127.5,
-          width: 215,
-          height: 215,
-          borderRadius: 215 / 2,
-          borderWidth: 10,
-          borderColor: '#333232'
-        }}/>
+          style={styles.rouletteBorder}/>
 
         <Roulette
-          customStyle={{
-          position: 'absolute',
-          bottom: -120,
-          backgroundColor: 'rgba(236, 240, 241,0.69)'
-        }}
-          customCenterStyle={{
-          width: 100,
-          height: 100,
-          backgroundColor: "#333232"
-        }}
+          customStyle={styles.rouletteStyle}
+          customCenterStyle={styles.rouletteCenter}
           rouletteRotate={30}
           enableUserRotate
           radius={200}
@@ -213,13 +198,9 @@ export default class App extends React.Component {
             .map(key => (
               <TouchableOpacity key={key} onPress={() => {}}>
                 <Image
-                  ref="icon"
-                  style={{
-                  width: this.rouletteItemDim,
-                  height: this.rouletteItemDim
-                }}
+                  style={styles.rouletteItem}
                   source={tetrisBlocks[key]}
-                  title="TAPBOO"/>
+                  />
               </TouchableOpacity>
             ))}
 
@@ -236,34 +217,7 @@ export default class App extends React.Component {
       </View>
     );
   }
-
-}
-class CustomCallout extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: true,
-      //  load: function.bind(this)
-    }
-  }
-  imageLoaded() {}
-  render() {
-    return (
-      <View style={styles.card}>
-        <Image
-          source={this.props.marker.icon}
-          style={styles.cardImage}
-          resizeMode="cover"/>
-        <View style={styles.textContent}>
-          <Text numberOfLines={1} style={styles.cardtitle}>{this.props.marker.title}</Text>
-          <Text numberOfLines={1} style={styles.cardDescription}>
-            {this.props.marker.description}
-          </Text>
-        </View>
-      </View>
-    )
-  }
+  
 }
 class DataSource {
   getElementAtIndex (index) {
@@ -281,7 +235,12 @@ class LoopingListView extends React.Component{
    getItem (data, index) {
     return data.getElementAtIndex(index)
   }
-  
+  componentWillUpdate(){
+    console.log("list")
+  }
+  shouldComponentUpdate(){
+    return false;
+  }
    getItemCount (data) {
     return 1000
   }
@@ -291,42 +250,101 @@ render(){
   return (
     <VirtualizedList
         data={data}
-        style={{left:-154,width:50}}
-        // initialNumToRender={20}
+        style={styles.list}
+         initialNumToRender={16}
         // maxToRenderPerBatch={}
-         windowSize={21}
+         windowSize={15}
         getItemCount={this.getItemCount}
         getItem={this.getItem}
         keyExtractor={(item, index) => {
-          return item.key
+          return index
         }}
+        ListEmptyComponent= { ()=>(
+            <View  // Border
+          style={styles.countryList}>
+               <Flag
+                 code={'a'}
+                 size={45}
+                 style={styles.flag}
+               />
+               </View>
+        )}
+        getItemLayout={(data,index)=>(
+           {length: 48, offset: 48*index, index: index}
+        )
+
+        }
         renderItem={({ item, index }) => {
           return (
-            
-            <TouchableOpacity>
-            <View  //Roulette Border
+            <View  // Border
+            renderToHardwareTextureAndroid={true}
+            shouldRasterizeIOS={true}
           style={styles.countryList}>
                <Flag
                  code={this.props.countryList[index%this.props.countryList.length]}
-                 size={42}
+                 size={45}
+                 style={styles.flag}
                />
                </View>
-            </TouchableOpacity>
-
           )
         }}
       />
   )
 }
 } 
+class CustomCallout extends React.Component {
+  
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true,
+      //  load: function.bind(this)
+    }
+  }
+  componentWillUpdate(){
+    console.log("callout")
+  }
+  shouldComponentUpdate(){
+    return false;
+  }
+  imageLoaded() {
+    this.forceUpdate()
+  }
+  render() {
+    return (
+      <View style={styles.card}>
+        <Image
+          source={this.props.marker.icon}
+          style={styles.cardImage}
+          onLoad={()=>{console.log("hi")}}
+          
+          />
+        <View style={styles.textContent}>
+          <Text numberOfLines={1} style={styles.cardtitle}>{this.props.marker.title}</Text>
+          <Text numberOfLines={1} style={styles.cardDescription}>
+            {this.props.marker.description}
+          </Text>
+        </View>
+      </View>
+    )
+  }
+}
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
     backgroundColor: '#F5FCFF',
     alignItems: 'center',
     justifyContent: 'center'
   },
+  rouletteCenter:{
+    width: 100,
+    height: 100,
+    backgroundColor: "#333232"
+  },
+  list:{left:-152,width:58,backgroundColor:'rgba(229, 229, 229,0.69)'},
+  flag:{left:-0.516,top:-0.516},
   map: {
     left: 0,
     right: 0,
@@ -334,15 +352,45 @@ const styles = StyleSheet.create({
     top: 0,
     position: 'absolute'
   },
-  countryList:
+  rouletteStyle:{
+    position: 'absolute',
+    bottom: -120,
+    backgroundColor:'rgba(236, 240, 241,0.69)'
+  },
+  rouletteItem:
+  {
+    width: 40,
+    height: 40
+  },
+  rouletteBorder:{
+    position: 'absolute',
+    bottom: -127.5,
+    width: 215,
+    height: 215,
+    borderRadius: 215 / 2,
+    borderWidth: 10,
+    borderColor: '#333232'
+  },
+  countryList://border
     {
-      width: 50,
-      backgroundColor:'rgba(236, 240, 241,0.69)',
-      height: 50,
-      borderRadius: 5,
-      borderWidth: 4,
-      borderColor: '#333232'
+      width: 48,
+      backgroundColor:'#333232',
+      height: 48,
+      borderRadius: 48/2,
+      borderWidth: 2,
+      borderColor: '#333232',
+      marginTop:1,
+      marginBottom:1,
+      marginLeft:4
     },
+    square: {//countries border
+      position:'absolute',
+      width: 4,
+      left:53,
+      height: height,
+      backgroundColor: '#333232',
+      zIndex:2
+  },
   card: {
     padding: 10,
     elevation: 2,
