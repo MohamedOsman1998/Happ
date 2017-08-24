@@ -59,7 +59,7 @@ import RouletteItem from './RouletteItem';
             toValue: nextItem,
             duration:5000,
             easing: Easing.out(Easing.exp),
-             useNativeDriver: true, //try this
+            //  useNativeDriver: true, //try this
           },).start();
 
           const newActiveItem = (nextItem % children.length)+1

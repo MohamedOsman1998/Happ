@@ -151,9 +151,6 @@ export default class App extends React.Component {
 
       <View style={styles.container}>
 
-        <TouchableOpacity style={styles.searchIconWrapper}>
-          <Image style={styles.searchIcon} source={this.state.searchIcon}/>
-        </TouchableOpacity>
 
         <MapView
           showsCompass={false}
@@ -177,9 +174,12 @@ export default class App extends React.Component {
               </MapView.Marker>
             ))}
         </MapView>
+        <TouchableOpacity style={styles.searchIconWrapper}>
+          <Image style={styles.searchIcon} source={this.state.searchIcon}/>
+        </TouchableOpacity>
 
-          <View style={styles.square} />
           <LoopingListView countryList={countryList}/>
+          <View style={styles.square} />
 
 
         <View  //Roulette Border
@@ -251,11 +251,12 @@ render(){
     <VirtualizedList
         data={data}
         style={styles.list}
-         initialNumToRender={16}
+         initialNumToRender={40}
         // maxToRenderPerBatch={}
-         windowSize={15}
+         windowSize={60}
         getItemCount={this.getItemCount}
         getItem={this.getItem}
+        initialScrollIndex={400}
         keyExtractor={(item, index) => {
           return index
         }}
@@ -276,6 +277,7 @@ render(){
         }
         renderItem={({ item, index }) => {
           return (
+            
             <View  // Border
             renderToHardwareTextureAndroid={true}
             shouldRasterizeIOS={true}
@@ -389,7 +391,7 @@ const styles = StyleSheet.create({
       left:53,
       height: height,
       backgroundColor: '#333232',
-      zIndex:2
+      // zIndex:2
   },
   card: {
     padding: 10,
@@ -413,7 +415,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     top: 12,
-    zIndex: 10
+    // zIndex: 10
   },
   searchIcon: {
     width: 50,
