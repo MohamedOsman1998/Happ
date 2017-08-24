@@ -8,6 +8,7 @@
 		"androidCustom": "react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res && react-native run-android"
 	},
 	"dependencies": {
+		"lottie-react-native": "^2.2.0",
 		"react": "16.0.0-alpha.12",
 		"react-native": "0.47.1",
 		"react-native-maps": "^0.16.0"

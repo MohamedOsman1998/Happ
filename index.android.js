@@ -21,6 +21,8 @@ import {
 
 import MapView from 'react-native-maps';
 import Flag from './Flag.js'
+import SplashScreen from './SplashScreen.js'
+
 
 
 
@@ -125,6 +127,7 @@ export default class App extends React.Component {
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421
       },
+      splash:true,
       mapStyle: isDay
         ? dayStyle
         : nightStyle,
@@ -144,9 +147,18 @@ export default class App extends React.Component {
     }
     this.setState({region});
   }
-  async componentDidMount() {}
-
+  async componentDidMount() {
+    setTimeout(()=>{
+      this.setState({splash:false})
+    }, 5000);
+  }
   render() {
+        if(this.state.splash){
+      return(
+        <SplashScreen/>
+      )
+    }
+    else
     return (
 
       <View style={styles.container}>

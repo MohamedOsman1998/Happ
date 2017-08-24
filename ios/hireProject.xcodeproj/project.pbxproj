@@ -36,6 +36,8 @@
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		6ECEE98758D94BB7BBD77071 /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F0C0D1E2B1BD40A5B8E78613 /* libAirMaps.a */; };
+		8EDFB00FA0B14CF78612D5BB /* libLottie.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E02F3F2B2E4C81A9F6230C /* libLottie.a */; };
+		2D475726249D4266B8F04249 /* libLottieReactNative.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36830F22E75648248E50A218 /* libLottieReactNative.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -257,6 +259,10 @@
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		18A703CD58F54895A7A6BA5B /* AirMaps.xcodeproj */ = {isa = PBXFileReference; name = "AirMaps.xcodeproj"; path = "../node_modules/react-native-maps/lib/ios/AirMaps.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		F0C0D1E2B1BD40A5B8E78613 /* libAirMaps.a */ = {isa = PBXFileReference; name = "libAirMaps.a"; path = "libAirMaps.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		E0B100A1E0694EB3ADA04AD4 /* Lottie.xcodeproj */ = {isa = PBXFileReference; name = "Lottie.xcodeproj"; path = "../node_modules/lottie-ios/Lottie.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		53E02F3F2B2E4C81A9F6230C /* libLottie.a */ = {isa = PBXFileReference; name = "libLottie.a"; path = "libLottie.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		00E718F8AA9F49279A74CA5F /* LottieReactNative.xcodeproj */ = {isa = PBXFileReference; name = "LottieReactNative.xcodeproj"; path = "../node_modules/lottie-react-native/lib/ios/LottieReactNative.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		36830F22E75648248E50A218 /* libLottieReactNative.a */ = {isa = PBXFileReference; name = "libLottieReactNative.a"; path = "libLottieReactNative.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -284,6 +290,8 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				6ECEE98758D94BB7BBD77071 /* libAirMaps.a in Frameworks */,
+				8EDFB00FA0B14CF78612D5BB /* libLottie.a in Frameworks */,
+				2D475726249D4266B8F04249 /* libLottieReactNative.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,6 +459,8 @@
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				18A703CD58F54895A7A6BA5B /* AirMaps.xcodeproj */,
+				E0B100A1E0694EB3ADA04AD4 /* Lottie.xcodeproj */,
+				00E718F8AA9F49279A74CA5F /* LottieReactNative.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -983,6 +993,8 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-maps\lib\ios/**",
+					"$(SRCROOT)\..\node_modules\lottie-ios\lottie-ios\Classes/**",
+					"$(SRCROOT)\..\node_modules\lottie-react-native\lib\ios\LottieReactNative",
 				);
 			};
 			name = Debug;
@@ -1008,6 +1020,8 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-maps\lib\ios/**",
+					"$(SRCROOT)\..\node_modules\lottie-ios\lottie-ios\Classes/**",
+					"$(SRCROOT)\..\node_modules\lottie-react-native\lib\ios\LottieReactNative",
 				);
 			};
 			name = Release;
@@ -1030,6 +1044,8 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-maps\lib\ios/**",
+					"$(SRCROOT)\..\node_modules\lottie-ios\lottie-ios\Classes/**",
+					"$(SRCROOT)\..\node_modules\lottie-react-native\lib\ios\LottieReactNative",
 				);
 			};
 			name = Debug;
@@ -1051,6 +1067,8 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-maps\lib\ios/**",
+					"$(SRCROOT)\..\node_modules\lottie-ios\lottie-ios\Classes/**",
+					"$(SRCROOT)\..\node_modules\lottie-react-native\lib\ios\LottieReactNative",
 				);
 			};
 			name = Release;
@@ -1085,6 +1103,8 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-maps\lib\ios/**",
+					"$(SRCROOT)\..\node_modules\lottie-ios\lottie-ios\Classes/**",
+					"$(SRCROOT)\..\node_modules\lottie-react-native\lib\ios\LottieReactNative",
 				);
 			};
 			name = Debug;
@@ -1119,6 +1139,8 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-maps\lib\ios/**",
+					"$(SRCROOT)\..\node_modules\lottie-ios\lottie-ios\Classes/**",
+					"$(SRCROOT)\..\node_modules\lottie-react-native\lib\ios\LottieReactNative",
 				);
 			};
 			name = Release;
