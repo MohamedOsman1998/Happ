@@ -14,6 +14,7 @@ import {
   View,
   VirtualizedList,
   Image,
+  WebView,
   TouchableOpacity,
   Dimensions
 } from 'react-native';
@@ -121,12 +122,7 @@ export default class App extends React.Component {
       searchIcon: isDay
         ? require('./assets/icons/png/001-magnifying-glass.png')
         : require('./assets/icons/png/001-magnifying-glass-white.png'),
-      region: {
-        latitude: 2.945895,
-        longitude: 101.870711,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421
-      },
+
       splash:true,
       mapStyle: isDay
         ? dayStyle
@@ -145,7 +141,8 @@ export default class App extends React.Component {
     } else {
       this.setState({markers:[marker1, marker2,marker3]}) 
     }
-    this.setState({region});
+    // this.setState({region});
+    console.log(region)
   }
   async componentDidMount() {
     setTimeout(()=>{
@@ -163,29 +160,35 @@ export default class App extends React.Component {
 
       <View style={styles.container}>
 
-
         <MapView
           showsCompass={false}
           style={styles.map}
-          region={this.state.region}
-          onRegionChange={this.onRegionChange}
+          onRegionChangeComplete={this.onRegionChange}
           customMapStyle={this.state.mapStyle}
+          initialRegion={{
+        latitude: 2.945895,
+        longitude: 101.870711,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421
+      }}
           rotateEnabled={false}>
 
           {this
             .state
             .markers
             .map((marker,id) => (
-
               <MapView.Marker //TODO: create custom view for marker to make the width and height consistent on all resolutions
                 key={marker.id} coordinate={marker.latlng} title={marker.title}  description={marker.description}>
                 <Image ref="icon" source={id?tetrisBlocks.z:tetrisBlocks.b}style={{width:40,height:40}}/>
-                <MapView.Callout>
-                  <CustomCallout marker={marker}/>
+                <MapView.Callout
+                style={{width:250,height:200}}>
+                  <CustomCallout marker={marker}style={{width:250,height:200}}/>
                 </MapView.Callout>
               </MapView.Marker>
+
             ))}
         </MapView>
+
         <TouchableOpacity style={styles.searchIconWrapper}>
           <Image style={styles.searchIcon} source={this.state.searchIcon}/>
         </TouchableOpacity>
@@ -264,8 +267,8 @@ render(){
         data={data}
         style={styles.list}
          initialNumToRender={40}
-        // maxToRenderPerBatch={}
-         windowSize={60}
+         maxToRenderPerBatch={90}
+         windowSize={35}
         getItemCount={this.getItemCount}
         getItem={this.getItem}
         initialScrollIndex={400}
@@ -312,26 +315,49 @@ class CustomCallout extends React.Component {
     super(props);
     this.state = {
       loading: true,
-      //  load: function.bind(this)
     }
   }
+
   componentWillUpdate(){
-    console.log("callout")
+
+    console.log(arguments)
   }
-  shouldComponentUpdate(){
-    return false;
+  // shouldComponentUpdate(){
+  //   console.log(arguments)
+  // }
+  // async  getImage() {
+  //   try {
+  //     let response = await fetch(this.props.marker.icon.uri);
+  //     console.log(response);
+  //     return response;
+  //   } catch(error) {
+  //     console.error(error);
+  //   }
+  // }
+    componentDidMount(){
+      // require( {
+      //   uri: "http://www.customwebsitevideo.com/images/prosbo_hires.jpg"
+      // })
+      console.log(this.props)
   }
-  imageLoaded() {
-    this.forceUpdate()
-  }
+
   render() {
+    // if(this.state.loading){
+    //   return(
+    //     <Text>image is loading</Text>
+    //   )
+
+    // }else 
     return (
       <View style={styles.card}>
-        <Image
+        <WebView
+        startInLoadingState={true}
           source={this.props.marker.icon}
           style={styles.cardImage}
-          onLoad={()=>{console.log("hi")}}
-          
+          onLoadEnd={()=>{()=>(
+            console.log("failed--------------------")
+          )}}
+          onLoadStart={()=>(console.log("started"))}
           />
         <View style={styles.textContent}>
           <Text numberOfLines={1} style={styles.cardtitle}>{this.props.marker.title}</Text>
@@ -438,8 +464,8 @@ const styles = StyleSheet.create({
   },
   cardImage: {
     flex: 3,
-    width: "100%",
-    height: "100%",
+    width: 150,
+    height:250,
     alignSelf: "center"
   },
   textContent: {

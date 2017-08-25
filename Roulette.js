@@ -9,7 +9,7 @@ import RouletteItem from './RouletteItem';
     super(props);
     this.state = {
       _animatedValue: new Animated.Value(0),
-      activeItem: 0,
+      // activeItem: 0,
     };
     this.gestureVars={
       gestureActive:false,
@@ -32,7 +32,7 @@ import RouletteItem from './RouletteItem';
        onPanResponderGrant: (evt, gestureState) => {
         // The gesture has started. 
         // gestureState.d{x,y} will be set to zero now
-        console.log("grans")
+          console.log("grans")
           const {children} = this.props;
 
           // let prevActiveItem=this.state.activeItem-1<1?children.length:this.state.activeItem-1;
@@ -45,30 +45,53 @@ import RouletteItem from './RouletteItem';
       },
       onPanResponderRelease: (evt, gestureState) => {
         const {enableUserRotate, handlerOfRotate} = this.props;
-        console.log(gestureState,gestureState.vx);
         if (enableUserRotate) {
+          let nextItem ;
           const {children} = this.props;
-          const {activeItem} = this.state;//dont need activeItem anymore
-          const nextItem = Math.round(this.state._animatedValue._value) + 20;//make this dependant on velocity and do direction and ignore small dx's
-          
+          // const {activeItem} = this.state;//dont need activeItem anymore
+          const sign=gestureState.vx>0?1:-1;
+          console.log(gestureState.vx)
+          gestureState.vx=Math.abs(gestureState.vx)
+          if(gestureState.vx<0.4){
+            console.log("first")
+             nextItem=Math.round(this.state._animatedValue._value);
+            Animated.spring(this.state._animatedValue, {
+              toValue: nextItem,
+              speed:18,
+              bounciness:19,
+            },).start();
+            
+          }else if(gestureState.vx<1.3){
+            console.log("sec")
+           console.log(this.state._animatedValue._value%children.length+(gestureState.vx*6)*sign)
+           
+             nextItem=Math.round(this.state._animatedValue._value+(gestureState.vx*6)*sign);
+            Animated.timing(this.state._animatedValue, {
+              toValue: nextItem,
+              duration:3000,
+              easing: Easing.out(Easing.exp),
+            },).start();
+            
+          }else { 
+            nextItem = Math.round(this.state._animatedValue._value + (gestureState.vx*10)*sign );//make this dependant on velocity and do direction and ignore small dx's
+           console.log("last")
+           console.log((gestureState.vx))
+           
           // this
           //   .state//becoz it might be out of range becoz of prev anim 
           //   ._animatedValue
           //   .setValue(activeItem);
           Animated.timing(this.state._animatedValue, {
             toValue: nextItem,
-            duration:5000,
-            easing: Easing.out(Easing.exp),
+            duration:gestureState.vx*3100>9000?9000:gestureState.vx*3100,
+            easing: Easing.out(Easing.poly(3)),
             //  useNativeDriver: true, //try this
           },).start();
 
-          const newActiveItem = (nextItem % children.length)+1
-
-          // console.log(newActiveItem)
-
-          this.setState({
-            activeItem: newActiveItem
-          }, () => handlerOfRotate(children[children.length - newActiveItem].props));
+        }
+        console.log(nextItem,this.state._animatedValue._value)
+      //     const newActiveItem = (nextItem % children.length)+1
+      //  handlerOfRotate(children[children.length - newActiveItem].props);
         }
       }
     });
