@@ -58,18 +58,18 @@ export default class splash extends React.Component {
   render() {
     return (
         <View style={styles.container}>
-            <View style={styles.textWrapper}>
-                <Text style={styles.text}>App Name</Text>
-            </View>
         <View style={styles.appIconBackground}    />
             <Image style={styles.appIcon}
                 source={require('./assets/icons/icon2.png')}/>
+            <View style={styles.textWrapper}>
+                <Text style={styles.text}>App Name</Text>
+            </View>
       <Animation
         style={{
           width: 100,
           height: 100,
             position:'absolute',
-            bottom:10,
+            bottom:-20,
             right:130
         }}
         source={require('./assets/animations/location.json')}
@@ -80,7 +80,7 @@ export default class splash extends React.Component {
           width: 100,
           height: 100,
             position:'absolute',
-            bottom:80,
+            bottom:30,
             right:130
         }}
         source={require('./assets/animations/preloader.json')}
@@ -91,37 +91,40 @@ export default class splash extends React.Component {
   }
 }
 const styles = StyleSheet.create({
-  container:{
-    width:width,
-    height:height,
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor:'#212121',
   },
   text:{
-      fontWeight:'bold',
+    fontFamily:"MontserratAlternates-ExtraLight",
       color:'white',
       fontSize:35,
   },
   textWrapper:{
-    position:'absolute',
-    bottom:370,
-    right:100
+    justifyContent:'center',
+    alignContent:'center',
+        bottom:100,
+    // right:100
   },
   appIcon:{
-      position:'absolute',
-      right:130,
-      width:100,
-      height:100,
-      bottom: 240
+    
+      justifyContent:'center',
+      alignContent:'center',
+            width:150,
+      height:150,
+      bottom:89,
   },
   appIconBackground:{
-    width:90,
-    height:90,
-    borderRadius:90/2,
-    borderWidth:49,
+    justifyContent:'center',
+    alignContent:'center',
+    width:140,
+    height:140,
+    borderRadius:140/2,
     borderColor:'#ffffff',
-    position:'absolute',
-    bottom: 241,
-      right:131,
+    borderWidth:70,
+    bottom:-60,
 },
 // appIconBackground:{
 //     width:102,

@@ -17,6 +17,7 @@ import {
   InteractionManager,
   VirtualizedList,
   Image,
+  TouchableWithoutFeedback,
   WebView,
   TouchableOpacity,
   Dimensions
@@ -214,7 +215,23 @@ export default class App extends React.Component {
           {Object
             .keys(tetrisBlocks)
             .map(key => (
-              <TouchableOpacity key={key} onPress={() => {}}>
+              <TouchableOpacity key={key}
+              delayPressIn={20}
+              delayPRessOut={20}//remove this
+              pressRetentionOffset={{top: 100, left: 100, bottom: 100, right: 100}}
+              hitSlop={{top: 100, left: 100, bottom: 100, right: 100}}
+              onPress={()=>{
+              var handle = InteractionManager.createInteractionHandle()
+              _mapView.animateToRegion({
+        latitude: 2.945895,
+        longitude: 101.870711,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421
+      },1460)
+              setTimeout(()=>{
+              InteractionManager.clearInteractionHandle(handle)
+              },610)
+              }}>
                 <Image
                   style={styles.rouletteItem}
                   source={tetrisBlocks[key]}
@@ -223,7 +240,16 @@ export default class App extends React.Component {
             ))}
 
         </Roulette>
-
+        <TouchableWithoutFeedback
+         onPress={()=>{
+              var handle = InteractionManager.createInteractionHandle()
+              _mapView.animateToRegion({
+        latitude: 2.945895,
+        longitude: 101.870711,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421
+      },1460)}}
+        >
         <Image
           source={require('./assets/icons/png/selector.png')}
           style={{
@@ -232,6 +258,7 @@ export default class App extends React.Component {
           position: 'absolute',
           bottom: 0
         }}/>
+      </TouchableWithoutFeedback>
       </View>
     );
   }
@@ -317,10 +344,10 @@ render(){
             <TouchableOpacity
             onPress={()=>{
               var handle = InteractionManager.createInteractionHandle()
-              _mapView.animateToRegion({latitude:26.820553,longitude:30.802498,latitudeDelta:9.9,longitudeDelta:9.9},560)
+              _mapView.animateToRegion({latitude:26.820553,longitude:30.802498,latitudeDelta:9.9,longitudeDelta:9.9},1460)
               setTimeout(()=>{
               InteractionManager.clearInteractionHandle(handle)
-              },610)
+              },1460)
               }}>   
                        <View  // Border
             renderToHardwareTextureAndroid={true}

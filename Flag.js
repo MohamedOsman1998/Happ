@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Image } from 'react-native';
-import * as flags from './flags';
+import * as flags from './assets/flags';
 
 // type Props = {
 //   size: 16 | 24 | 32 | 48 | 64,
