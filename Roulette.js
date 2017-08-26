@@ -73,7 +73,7 @@ import RouletteItem from './RouletteItem';
             },).start();
             
           }else { 
-            nextItem = Math.round(this.state._animatedValue._value + (gestureState.vx*10)*sign );//make this dependant on velocity and do direction and ignore small dx's
+            nextItem = Math.round(this.state._animatedValue._value + (gestureState.vx*13)*sign );//make this dependant on velocity and do direction and ignore small dx's
            console.log("last")
            console.log((gestureState.vx))
            

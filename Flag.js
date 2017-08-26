@@ -21,6 +21,8 @@ class Flag extends React.Component{
      const unknownFlag = flags['png']['flags']['unknown'];
     return(
     <Image
+    renderToHardwareTextureAndroid ={true}
+    shouldRasterizeIOS ={true}
       source={flag || unknownFlag}
       style={[{ width: size, height: size }, style]}
     />

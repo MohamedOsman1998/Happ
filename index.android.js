@@ -6,12 +6,15 @@
 
 import React, {Component} from 'react';
 import Roulette from './Roulette';
+var TimerMixin = require('react-timer-mixin');
+
 
 import {
   AppRegistry,
   StyleSheet,
   Text,
   View,
+  InteractionManager,
   VirtualizedList,
   Image,
   WebView,
@@ -23,7 +26,6 @@ import {
 import MapView from 'react-native-maps';
 import Flag from './Flag.js'
 import SplashScreen from './SplashScreen.js'
-
 
 
 
@@ -110,6 +112,8 @@ var marker3 = {
   icon: Images[2],
 }
 
+var _mapView: MapView;
+
 export default class App extends React.Component {
 
   constructor(props) {
@@ -141,8 +145,6 @@ export default class App extends React.Component {
     } else {
       this.setState({markers:[marker1, marker2,marker3]}) 
     }
-    // this.setState({region});
-    console.log(region)
   }
   async componentDidMount() {
     setTimeout(()=>{
@@ -161,6 +163,7 @@ export default class App extends React.Component {
       <View style={styles.container}>
 
         <MapView
+        ref={(mapView) => { _mapView = mapView; }}
           showsCompass={false}
           style={styles.map}
           onRegionChangeComplete={this.onRegionChange}
@@ -241,6 +244,8 @@ class DataSource {
 }
 
 const data = new DataSource()
+var scrollFlagBottom=false;
+var scrollFlagTop=false;
 class LoopingListView extends React.Component{
   constructor(props){
     super(props)
@@ -257,23 +262,40 @@ class LoopingListView extends React.Component{
     return false;
   }
    getItemCount (data) {
-    return 1000
+    return 200  
   }
   
 render(){
 
   return (
     <VirtualizedList
+        ref="vList"
         data={data}
         style={styles.list}
-         initialNumToRender={40}
-         maxToRenderPerBatch={90}
-         windowSize={35}
+
+         initialNumToRender={100}
+         windowSize={200}
+         maxToRenderPerBatch={50}
         getItemCount={this.getItemCount}
         getItem={this.getItem}
-        initialScrollIndex={400}
+        onScroll={(e)=>{
+          {/* console.log(scrollFlagBottom,"top",scrollFlagTop) */}
+          if(e.nativeEvent.contentOffset.y>9350){
+          {/* console.log("bottom") */}
+          scrollFlagBottom=true;
+            this.refs.vList.scrollToIndex({index:3,viewPosition:0,animated:false})
+            setTimeout(()=>{scrollFlagBottom=false},350)
+          }else if(e.nativeEvent.contentOffset.y<100&&!scrollFlagTop){
+          {/* console.log("top") */}
+          scrollFlagTop=true;
+            this.refs.vList.scrollToIndex({index:197,viewPosition:1,animated:false})
+            setTimeout(()=>{scrollFlagTop=false},350)
+          }
+        }}
+        updateCellsBatchingPeriod={850}
+        initialScrollIndex={30}
         keyExtractor={(item, index) => {
-          return index
+          return index  
         }}
         ListEmptyComponent= { ()=>(
             <View  // Border
@@ -292,8 +314,15 @@ render(){
         }
         renderItem={({ item, index }) => {
           return (
-            
-            <View  // Border
+            <TouchableOpacity
+            onPress={()=>{
+              var handle = InteractionManager.createInteractionHandle()
+              _mapView.animateToRegion({latitude:26.820553,longitude:30.802498,latitudeDelta:9.9,longitudeDelta:9.9},560)
+              setTimeout(()=>{
+              InteractionManager.clearInteractionHandle(handle)
+              },610)
+              }}>   
+                       <View  // Border
             renderToHardwareTextureAndroid={true}
             shouldRasterizeIOS={true}
           style={styles.countryList}>
@@ -303,6 +332,7 @@ render(){
                  style={styles.flag}
                />
                </View>
+               </TouchableOpacity>
           )
         }}
       />
@@ -320,7 +350,6 @@ class CustomCallout extends React.Component {
 
   componentWillUpdate(){
 
-    console.log(arguments)
   }
   // shouldComponentUpdate(){
   //   console.log(arguments)
@@ -338,7 +367,6 @@ class CustomCallout extends React.Component {
       // require( {
       //   uri: "http://www.customwebsitevideo.com/images/prosbo_hires.jpg"
       // })
-      console.log(this.props)
   }
 
   render() {
@@ -354,9 +382,8 @@ class CustomCallout extends React.Component {
         startInLoadingState={true}
           source={this.props.marker.icon}
           style={styles.cardImage}
-          onLoadEnd={()=>{()=>(
-            console.log("failed--------------------")
-          )}}
+          onLoadEnd={()=>{()=>{}
+          }}
           onLoadStart={()=>(console.log("started"))}
           />
         <View style={styles.textContent}>
