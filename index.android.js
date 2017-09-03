@@ -6,7 +6,10 @@
 
 import React, {Component} from 'react';
 import Roulette from './Roulette';
+import {HireAppApi} from './constants/api';
 var TimerMixin = require('react-timer-mixin');
+
+const hireAppApi = new HireAppApi();
 
 
 import {
@@ -117,6 +120,11 @@ var _mapView: MapView;
 
 export default class App extends React.Component {
 
+  static defaultProps = {
+    hireAppApi
+  }
+
+
   constructor(props) {
 
     super(props);
@@ -132,7 +140,9 @@ export default class App extends React.Component {
       mapStyle: isDay
         ? dayStyle
         : nightStyle,
-      markers: [marker1, marker2, marker3]
+      markers: [marker1, marker2, marker3],
+      loading: false,
+      hireapp: []
     };
     this.onRegionChange = this
       .onRegionChange
@@ -151,6 +161,9 @@ export default class App extends React.Component {
     setTimeout(()=>{
       this.setState({splash:false})
     }, 5000);
+    this.setState({loading: true});
+    const data = await this.props.hireAppApi.fetchTest();
+    this.setState({loading: false, hireapp: data});
   }
   render() {
         if(this.state.splash){
