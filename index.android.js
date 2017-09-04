@@ -161,9 +161,15 @@ export default class App extends React.Component {
     setTimeout(()=>{
       this.setState({splash:false})
     }, 5000);
+   // console.log("I am here too");
     this.setState({loading: true});
-    const data = await this.props.hireAppApi.fetchTest();
+    const data = await this.props.hireAppApi.TetrisList();
+    //console.log(await this.props.hireAppApi.CountriesList());
+    console.log(data);
     this.setState({loading: false, hireapp: data});
+    //console.log("I am here");
+    console.log(this.setState.hireapp);
+    
   }
   render() {
         if(this.state.splash){
