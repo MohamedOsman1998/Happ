@@ -1,0 +1,8 @@
+{
+    "extends": ["react-native"],
+    "rules": {
+      "react/no-multi-comp":"off",
+      "react/jsx-no-bind":"off",
+      "class-methods-use-this":"off"
+    }
+  }
