@@ -11,6 +11,7 @@
 		"axios": "^0.16.2",
 		"lottie-react-native": "^2.2.0",
 		"react": "16.0.0-alpha.12",
+		"react-android-360-video": "0.0.6",
 		"react-native": "0.47.1",
 		"react-native-maps": "^0.16.0"
 	},
@@ -22,6 +23,10 @@
 	"devDependencies": {
 		"babel-jest": "20.0.3",
 		"babel-preset-react-native": "2.1.0",
+		"esformatter-jsx": "^8.0.1",
+		"eslint": "^4.9.0",
+		"eslint-config-equimper": "^2.2.1",
+		"eslint-config-react-native": "^1.6.0",
 		"jest": "20.0.4",
 		"react-native-cli": "^2.0.1",
 		"react-test-renderer": "16.0.0-alpha.12"

@@ -1,17 +1,12 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, {Component} from 'react';
 import Roulette from './Roulette';
 import {HireAppApi} from './constants/api';
-var TimerMixin = require('react-timer-mixin');
+import renderIf from './renderIf';
+import {dayStyle,nightStyle} from './mapStyles';
+import InfoConditionalView from './InfoConditionalView.js'
+const TimerMixin = require('react-timer-mixin');
 
 const hireAppApi = new HireAppApi();
-
-
 import {
   AppRegistry,
   StyleSheet,
@@ -22,6 +17,7 @@ import {
   Image,
   TouchableWithoutFeedback,
   WebView,
+  Modal,
   TouchableOpacity,
   Dimensions
 } from 'react-native';
@@ -71,7 +67,7 @@ const countryList=[
   'gibraltar',
   'greece',
 ]
-const {width, height} = Dimensions.get("window");
+const {width, height } = Dimensions.get("window");
 
 const CARD_HEIGHT = height / 2;
 const CARD_WIDTH = CARD_HEIGHT - 50;
@@ -84,7 +80,8 @@ const tetrisBlocks = {
   z: require('./assets/icons/tetris/z1.png')
 }
 
-var marker1 = {
+
+const marker1 = {
   id: 0,
   latlng: {
     latitude: 2.945895,
@@ -95,7 +92,7 @@ var marker1 = {
   icon: Images[0],
 }
 
-var marker2 = {
+const marker2 = {
   id: 1,
   latlng: {
     latitude: 2.917252,
@@ -105,7 +102,7 @@ var marker2 = {
   description: "The university Of nottingham in malaysia",
   icon: Images[1],
 }
-var marker3 = {
+const marker3 = {
   id: 2,
   latlng: {
     latitude: 2.945869,
@@ -116,7 +113,7 @@ var marker3 = {
   icon: Images[2],
 }
 
-var _mapView: MapView;
+let _mapView: MapView;
 
 export default class App extends React.Component {
 
@@ -128,48 +125,34 @@ export default class App extends React.Component {
   constructor(props) {
 
     super(props);
-    let d = new Date;
-    var isDay = d.getHours() > 6 && d.getHours() < 18;
-    isDay=true;
     this.state = {
-      searchIcon: isDay
-        ? require('./assets/icons/png/001-magnifying-glass.png')
-        : require('./assets/icons/png/001-magnifying-glass-white.png'),
-
-      splash:true,
-      mapStyle: isDay
-        ? dayStyle
-        : nightStyle,
+      modalVisible: false,
+      splash: true,
+      mapStyle:         dayStyle,
       markers: [marker1, marker2, marker3],
       loading: false,
-      hireapp: []
+      hireapp: [],
     };
     this.onRegionChange = this
       .onRegionChange
       .bind(this);
 
-  };
+  }
 
   onRegionChange(region) {
     if (region.latitudeDelta > 0.2) {
-      this.setState({markers:[marker1, marker2]}) 
+      this.setState({markers:[marker1, marker2]})
     } else {
-      this.setState({markers:[marker1, marker2,marker3]}) 
+      this.setState({markers:[marker1, marker2,marker3]})
     }
   }
   async componentDidMount() {
     setTimeout(()=>{
       this.setState({splash:false})
-    }, 5000);
-   // console.log("I am here too");
-    this.setState({loading: true});
-    const data = await this.props.hireAppApi.TetrisList();
-    //console.log(await this.props.hireAppApi.CountriesList());
-    console.log(data);
-    this.setState({loading: false, hireapp: data});
-    //console.log("I am here");
-    console.log(this.setState.hireapp);
-    
+    }, 500);
+    // this.setState({loading: true});
+    // const data = await this.props.hireAppApi.TetrisList();
+    // this.setState({loading: false, hireapp: data});
   }
   render() {
         if(this.state.splash){
@@ -177,7 +160,7 @@ export default class App extends React.Component {
         <SplashScreen/>
       )
     }
-    else
+
     return (
 
       <View style={styles.container}>
@@ -211,12 +194,25 @@ export default class App extends React.Component {
 
             ))}
         </MapView>
-
-        <TouchableOpacity style={styles.searchIconWrapper}>
-          <Image style={styles.searchIcon} source={this.state.searchIcon}/>
+        <TouchableOpacity style={styles.searchIconWrapper}
+          onPress={()=>{this.setState({modalVisible:!this.state.modalVisible})}}>
+          <Image style={styles.searchIcon} source={require("./assets/icons/png/info.png")}/>
         </TouchableOpacity>
 
           <LoopingListView countryList={countryList}/>
+          <Modal
+          animationType="fade"
+          hardwareAccelerated
+          transparent
+          visible={this.state.modalVisible}
+          onRequestClose={() => {}}
+          >
+                    <InfoConditionalView style={{position:"absolute"}}/>
+          <TouchableOpacity style={styles.searchIconWrapper}
+          onPress={()=>{this.setState({modalVisible:!this.state.modalVisible})}}>
+          <Image style={styles.searchIcon} source={require("./assets/icons/png/info.png")}/>
+        </TouchableOpacity>
+            </Modal>
           <View style={styles.square} />
 
 
@@ -238,9 +234,9 @@ export default class App extends React.Component {
               delayPressIn={20}
               delayPRessOut={20}//remove this
               pressRetentionOffset={{top: 100, left: 100, bottom: 100, right: 100}}
-              hitSlop={{top: 100, left: 100, bottom: 100, right: 100}}
+              hitSlop={{top: 100, left: 100, bottom: 100, right: 100}}//remove
               onPress={()=>{
-              var handle = InteractionManager.createInteractionHandle()
+              const handle = InteractionManager.createInteractionHandle()
               _mapView.animateToRegion({
         latitude: 2.945895,
         longitude: 101.870711,
@@ -261,7 +257,7 @@ export default class App extends React.Component {
         </Roulette>
         <TouchableWithoutFeedback
          onPress={()=>{
-              var handle = InteractionManager.createInteractionHandle()
+              const handle = InteractionManager.createInteractionHandle()
               _mapView.animateToRegion({
         latitude: 2.945895,
         longitude: 101.870711,
@@ -278,10 +274,11 @@ export default class App extends React.Component {
           bottom: 0
         }}/>
       </TouchableWithoutFeedback>
+
       </View>
     );
   }
-  
+
 }
 class DataSource {
   getElementAtIndex (index) {
@@ -290,8 +287,9 @@ class DataSource {
 }
 
 const data = new DataSource()
-var scrollFlagBottom=false;
-var scrollFlagTop=false;
+
+let scrollFlagBottom=false
+let scrollFlagTop=false;
 class LoopingListView extends React.Component{
   constructor(props){
     super(props)
@@ -307,10 +305,10 @@ class LoopingListView extends React.Component{
   shouldComponentUpdate(){
     return false;
   }
-   getItemCount (data) {
-    return 200  
+    getItemCount (data){
+    return 200
   }
-  
+
 render(){
 
   return (
@@ -340,9 +338,7 @@ render(){
         }}
         updateCellsBatchingPeriod={850}
         initialScrollIndex={30}
-        keyExtractor={(item, index) => {
-          return index  
-        }}
+        keyExtractor={(item, index) => index}
         ListEmptyComponent= { ()=>(
             <View  // Border
           style={styles.countryList}>
@@ -354,39 +350,37 @@ render(){
                </View>
         )}
         getItemLayout={(data,index)=>(
-           {length: 48, offset: 48*index, index: index}
+           {length: 48, offset: 48*index, index}
         )
 
         }
-        renderItem={({ item, index }) => {
-          return (
+        renderItem={({ item, index }) => (
             <TouchableOpacity
             onPress={()=>{
-              var handle = InteractionManager.createInteractionHandle()
+              const handle = InteractionManager.createInteractionHandle()
               _mapView.animateToRegion({latitude:26.820553,longitude:30.802498,latitudeDelta:9.9,longitudeDelta:9.9},1460)
               setTimeout(()=>{
               InteractionManager.clearInteractionHandle(handle)
               },1460)
-              }}>   
-                       <View  // Border
-            renderToHardwareTextureAndroid={true}
-            shouldRasterizeIOS={true}
+              }}>
+                <View  // Border
+            renderToHardwareTextureAndroid
+            shouldRasterizeIOS
           style={styles.countryList}>
-               <Flag
-                 code={this.props.countryList[index%this.props.countryList.length]}
-                 size={45}
-                 style={styles.flag}
-               />
-               </View>
-               </TouchableOpacity>
-          )
-        }}
+                <Flag
+                    code={this.props.countryList[index%this.props.countryList.length]}
+                    size={45}
+                    style={styles.flag}
+                />
+                  </View>
+                </TouchableOpacity>
+          )}
       />
   )
 }
-} 
+}
 class CustomCallout extends React.Component {
-  
+
   constructor(props) {
     super(props);
     this.state = {
@@ -421,11 +415,11 @@ class CustomCallout extends React.Component {
     //     <Text>image is loading</Text>
     //   )
 
-    // }else 
+    // }else
     return (
       <View style={styles.card}>
         <WebView
-        startInLoadingState={true}
+        startInLoadingState
           source={this.props.marker.icon}
           style={styles.cardImage}
           onLoadEnd={()=>{()=>{}
@@ -500,7 +494,7 @@ const styles = StyleSheet.create({
       position:'absolute',
       width: 4,
       left:53,
-      height: height,
+      height,
       backgroundColor: '#333232',
       // zIndex:2
   },
@@ -555,589 +549,4 @@ const styles = StyleSheet.create({
   }
 });
 
-// const dayStyle1 = [
-//   {
-//     "featureType": "administrative",
-//     "elementType": "labels.text.fill",
-//     "stylers": [
-//       {
-//         "color": "#6195a0"
-//       }
-//     ]
-//   }, {
-//     "featureType": "administrative.province",
-//     "elementType": "geometry.stroke",
-//     "stylers": [
-//       {
-//         "visibility": "off"
-//       }
-//     ]
-//   }, {
-//     "featureType": "landscape",
-//     "elementType": "geometry",
-//     "stylers": [
-//       {
-//         "lightness": "0"
-//       }, {
-//         "saturation": "0"
-//       }, {
-//         "color": "#f5f5f2"
-//       }, {
-//         "gamma": "1"
-//       }
-//     ]
-//   }, {
-//     "featureType": "landscape.man_made",
-//     "elementType": "all",
-//     "stylers": [
-//       {
-//         "lightness": "-3"
-//       }, {
-//         "gamma": "1.00"
-//       }
-//     ]
-//   }, {
-//     "featureType": "landscape.natural.terrain",
-//     "elementType": "all",
-//     "stylers": [
-//       {
-//         "visibility": "off"
-//       }
-//     ]
-//   }, {
-//     "featureType": "poi",
-//     "elementType": "all",
-//     "stylers": [
-//       {
-//         "visibility": "off"
-//       }
-//     ]
-//   }, {
-//     "featureType": "poi.park",
-//     "elementType": "geometry.fill",
-//     "stylers": [
-//       {
-//         "color": "#bae5ce"
-//       }, {
-//         "visibility": "on"
-//       }
-//     ]
-//   }, {
-//     "featureType": "road",
-//     "elementType": "all",
-//     "stylers": [
-//       {
-//         "saturation": -100
-//       }, {
-//         "lightness": 45
-//       }, {
-//         "visibility": "simplified"
-//       }
-//     ]
-//   }, {
-//     "featureType": "road.highway",
-//     "elementType": "all",
-//     "stylers": [
-//       {
-//         "visibility": "simplified"
-//       }
-//     ]
-//   }, {
-//     "featureType": "road.highway",
-//     "elementType": "geometry.fill",
-//     "stylers": [
-//       {
-//         "color": "#fac9a9"
-//       }, {
-//         "visibility": "simplified"
-//       }
-//     ]
-//   }, {
-//     "featureType": "road.highway",
-//     "elementType": "labels.text",
-//     "stylers": [
-//       {
-//         "color": "#4e4e4e"
-//       }
-//     ]
-//   }, {
-//     "featureType": "road.arterial",
-//     "elementType": "labels.text.fill",
-//     "stylers": [
-//       {
-//         "color": "#787878"
-//       }
-//     ]
-//   }, {
-//     "featureType": "road.arterial",
-//     "elementType": "labels.icon",
-//     "stylers": [
-//       {
-//         "visibility": "off"
-//       }
-//     ]
-//   }, {
-//     "featureType": "transit",
-//     "elementType": "all",
-//     "stylers": [
-//       {
-//         "visibility": "simplified"
-//       }
-//     ]
-//   }, {
-//     "featureType": "transit.station.airport",
-//     "elementType": "labels.icon",
-//     "stylers": [
-//       {
-//         "hue": "#0a00ff"
-//       }, {
-//         "saturation": "-77"
-//       }, {
-//         "gamma": "0.57"
-//       }, {
-//         "lightness": "0"
-//       }
-//     ]
-//   }, {
-//     "featureType": "transit.station.rail",
-//     "elementType": "labels.text.fill",
-//     "stylers": [
-//       {
-//         "color": "#43321e"
-//       }
-//     ]
-//   }, {
-//     "featureType": "transit.station.rail",
-//     "elementType": "labels.icon",
-//     "stylers": [
-//       {
-//         "hue": "#ff6c00"
-//       }, {
-//         "lightness": "4"
-//       }, {
-//         "gamma": "0.75"
-//       }, {
-//         "saturation": "-68"
-//       }
-//     ]
-//   }, {
-//     "featureType": "water",
-//     "elementType": "all",
-//     "stylers": [
-//       {
-//         "color": "#eaf6f8"
-//       }, {
-//         "visibility": "on"
-//       }
-//     ]
-//   }, {
-//     "featureType": "water",
-//     "elementType": "geometry.fill",
-//     "stylers": [
-//       {
-//         "color": "#c7eced"
-//       }
-//     ]
-//   }, {
-//     "featureType": "water",
-//     "elementType": "labels.text.fill",
-//     "stylers": [
-//       {
-//         "lightness": "-49"
-//       }, {
-//         "saturation": "-53"
-//       }, {
-//         "gamma": "0.79"
-//       }
-//     ]
-//   }
-// ]
-const dayStyle = [
-  {
-    "featureType": "all",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#7c93a3"
-      }, {
-        "lightness": "-10"
-      }
-    ]
-  }, {
-    "featureType": "administrative.country",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "visibility": "on"
-      }
-    ]
-  }, {
-    "featureType": "administrative.country",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {
-        "color": "#a0a4a5"
-      }
-    ]
-  }, {
-    "featureType": "administrative.province",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {
-        "color": "#62838e"
-      }
-    ]
-  }, {
-    "featureType": "landscape",
-    "elementType": "geometry.fill",
-    "stylers": [
-      {
-        "color": "#dde3e3"
-      }
-    ]
-  }, {
-    "featureType": "landscape.man_made",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {
-        "color": "#3f4a51"
-      }, {
-        "weight": "0.30"
-      }
-    ]
-  }, {
-    "featureType": "poi",
-    "elementType": "all",
-    "stylers": [
-      {
-        "visibility": "simplified"
-      }
-    ]
-  }, {
-    "featureType": "poi.attraction",
-    "elementType": "all",
-    "stylers": [
-      {
-        "visibility": "on"
-      }
-    ]
-  }, {
-    "featureType": "poi.business",
-    "elementType": "all",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  }, {
-    "featureType": "poi.government",
-    "elementType": "all",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  }, {
-    "featureType": "poi.park",
-    "elementType": "all",
-    "stylers": [
-      {
-        "visibility": "on"
-      }
-    ]
-  }, {
-    "featureType": "poi.place_of_worship",
-    "elementType": "all",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  }, {
-    "featureType": "poi.school",
-    "elementType": "all",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  }, {
-    "featureType": "poi.sports_complex",
-    "elementType": "all",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  }, {
-    "featureType": "road",
-    "elementType": "all",
-    "stylers": [
-      {
-        "saturation": "-100"
-      }, {
-        "visibility": "on"
-      }
-    ]
-  }, {
-    "featureType": "road",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {
-        "visibility": "on"
-      }
-    ]
-  }, {
-    "featureType": "road.highway",
-    "elementType": "geometry.fill",
-    "stylers": [
-      {
-        "color": "#bbcacf"
-      }
-    ]
-  }, {
-    "featureType": "road.highway",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {
-        "lightness": "0"
-      }, {
-        "color": "#bbcacf"
-      }, {
-        "weight": "0.50"
-      }
-    ]
-  }, {
-    "featureType": "road.highway",
-    "elementType": "labels",
-    "stylers": [
-      {
-        "visibility": "on"
-      }
-    ]
-  }, {
-    "featureType": "road.highway",
-    "elementType": "labels.text",
-    "stylers": [
-      {
-        "visibility": "on"
-      }
-    ]
-  }, {
-    "featureType": "road.highway.controlled_access",
-    "elementType": "geometry.fill",
-    "stylers": [
-      {
-        "color": "#ffffff"
-      }
-    ]
-  }, {
-    "featureType": "road.highway.controlled_access",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {
-        "color": "#a9b4b8"
-      }
-    ]
-  }, {
-    "featureType": "road.arterial",
-    "elementType": "labels.icon",
-    "stylers": [
-      {
-        "invert_lightness": true
-      }, {
-        "saturation": "-7"
-      }, {
-        "lightness": "3"
-      }, {
-        "gamma": "1.80"
-      }, {
-        "weight": "0.01"
-      }
-    ]
-  }, {
-    "featureType": "transit",
-    "elementType": "all",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  }, {
-    "featureType": "water",
-    "elementType": "geometry.fill",
-    "stylers": [
-      {
-        "color": "#a3c7df"
-      }
-    ]
-  }
-]
-const nightStyle = [
-  {
-    "featureType": "all",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "saturation": 36
-      }, {
-        "color": "#000000"
-      }, {
-        "lightness": 40
-      }
-    ]
-  }, {
-    "featureType": "all",
-    "elementType": "labels.text.stroke",
-    "stylers": [
-      {
-        "visibility": "on"
-      }, {
-        "color": "#000000"
-      }, {
-        "lightness": 16
-      }
-    ]
-  }, {
-    "featureType": "all",
-    "elementType": "labels.icon",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  }, {
-    "featureType": "administrative",
-    "elementType": "geometry.fill",
-    "stylers": [
-      {
-        "color": "#000000"
-      }, {
-        "lightness": 20
-      }
-    ]
-  }, {
-    "featureType": "administrative",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {
-        "color": "#000000"
-      }, {
-        "lightness": 17
-      }, {
-        "weight": 1.2
-      }
-    ]
-  }, {
-    "featureType": "landscape",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#000000"
-      }, {
-        "lightness": 20
-      }
-    ]
-  }, {
-    "featureType": "landscape.man_made",
-    "elementType": "geometry.fill",
-    "stylers": [
-      {
-        "visibility": "simplified"
-      }
-    ]
-  }, {
-    "featureType": "landscape.man_made",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  }, {
-    "featureType": "landscape.man_made",
-    "elementType": "labels.text",
-    "stylers": [
-      {
-        "color": "#ff0000"
-      }, {
-        "saturation": "50"
-      }, {
-        "gamma": "8.34"
-      }
-    ]
-  }, {
-    "featureType": "poi",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#000000"
-      }, {
-        "lightness": 21
-      }
-    ]
-  }, {
-    "featureType": "road.highway",
-    "elementType": "geometry.fill",
-    "stylers": [
-      {
-        "color": "#000000"
-      }, {
-        "lightness": 17
-      }
-    ]
-  }, {
-    "featureType": "road.highway",
-    "elementType": "geometry.stroke",
-    "stylers": [
-      {
-        "color": "#000000"
-      }, {
-        "lightness": 29
-      }, {
-        "weight": 0.2
-      }
-    ]
-  }, {
-    "featureType": "road.arterial",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#000000"
-      }, {
-        "lightness": 18
-      }
-    ]
-  }, {
-    "featureType": "road.local",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#000000"
-      }, {
-        "lightness": 16
-      }
-    ]
-  }, {
-    "featureType": "transit",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#000000"
-      }, {
-        "lightness": 19
-      }
-    ]
-  }, {
-    "featureType": "water",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#0f252e"
-      }, {
-        "lightness": 17
-      }
-    ]
-  }
-]
 AppRegistry.registerComponent('hireProject', () => App);
