@@ -1,0 +1,57 @@
+{
+  "_from": "react-android-360-video",
+  "_id": "react-android-360-video@0.0.6",
+  "_inBundle": false,
+  "_integrity": "sha1-9SJdSkVpmCBn4qlYV8ngR07pxhI=",
+  "_location": "/react-android-360-video",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "react-android-360-video",
+    "name": "react-android-360-video",
+    "escapedName": "react-android-360-video",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-android-360-video/-/react-android-360-video-0.0.6.tgz",
+  "_shasum": "f5225d4a4569982067e2a95857c9e0474ee9c612",
+  "_spec": "react-android-360-video",
+  "_where": "F:\\Repos\\react-native-app\\hirePro\\Happ1\\Happ",
+  "author": {
+    "name": "Prem Chaudhary"
+  },
+  "bugs": {
+    "url": "https://github.com/prem-codemymobile/VrVideoComponent/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {},
+  "deprecated": false,
+  "description": "A React Native wrapper for Google VrVideoView (for android) for playing 360 video",
+  "homepage": "https://github.com/prem-codemymobile/VrVideoComponent#readme",
+  "keywords": [
+    "react",
+    "native",
+    "vrvideoview",
+    "360",
+    "video",
+    "google",
+    "vr",
+    "cardboard"
+  ],
+  "main": "VrVideo360.js",
+  "name": "react-android-360-video",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prem-codemymobile/VrVideoComponent.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.0.6"
+}

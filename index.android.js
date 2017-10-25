@@ -4,7 +4,6 @@ import {HireAppApi} from './constants/api';
 import renderIf from './renderIf';
 import {dayStyle,nightStyle} from './mapStyles';
 import InfoConditionalView from './InfoConditionalView.js'
-const TimerMixin = require('react-timer-mixin');
 
 const hireAppApi = new HireAppApi();
 import {
@@ -18,6 +17,7 @@ import {
   TouchableWithoutFeedback,
   WebView,
   Modal,
+  BackHandler,
   TouchableOpacity,
   Dimensions
 } from 'react-native';
@@ -26,6 +26,8 @@ import {
 import MapView from 'react-native-maps';
 import Flag from './Flag.js'
 import SplashScreen from './SplashScreen.js'
+import VrVideoComponent from './assets/react-android-360-video/VrVideo360';
+const TimerMixin = require('react-timer-mixin');
 
 
 
@@ -127,6 +129,7 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       modalVisible: false,
+      videoVisible:false,
       splash: true,
       mapStyle:         dayStyle,
       markers: [marker1, marker2, marker3],
@@ -136,8 +139,8 @@ export default class App extends React.Component {
     this.onRegionChange = this
       .onRegionChange
       .bind(this);
-
   }
+
 
   onRegionChange(region) {
     if (region.latitudeDelta > 0.2) {
@@ -146,12 +149,24 @@ export default class App extends React.Component {
       this.setState({markers:[marker1, marker2,marker3]})
     }
   }
+  async componentWillMount(){
+    BackHandler.addEventListener('hardwareBackPress', ()=>{
+      console.log(this.state)
+      if (this.state.videoVisible) {
+        this.setState({videoVisible:false})
+        console.log(this.state);
+        return true;
+      }
+      return false;
+      });
+  }
   async componentDidMount() {
+
     setTimeout(()=>{
       this.setState({splash:false})
     }, 500);
-    // this.setState({loading: true});
     // const data = await this.props.hireAppApi.TetrisList();
+    // this.setState({loading: true});
     // this.setState({loading: false, hireapp: data});
   }
   render() {
@@ -187,6 +202,7 @@ export default class App extends React.Component {
                 key={marker.id} coordinate={marker.latlng} title={marker.title}  description={marker.description}>
                 <Image ref="icon" source={id?tetrisBlocks.z:tetrisBlocks.b}style={{width:40,height:40}}/>
                 <MapView.Callout
+                onPress={()=>{this.setState({videoVisible:true})}}
                 style={{width:250,height:200}}>
                   <CustomCallout marker={marker}style={{width:250,height:200}}/>
                 </MapView.Callout>
@@ -200,12 +216,13 @@ export default class App extends React.Component {
         </TouchableOpacity>
 
           <LoopingListView countryList={countryList}/>
-          <Modal
+
+            <Modal
           animationType="fade"
           hardwareAccelerated
           transparent
+          onRequestClose={()=>{}}
           visible={this.state.modalVisible}
-          onRequestClose={() => {}}
           >
                     <InfoConditionalView style={{position:"absolute"}}/>
           <TouchableOpacity style={styles.searchIconWrapper}
@@ -213,6 +230,29 @@ export default class App extends React.Component {
           <Image style={styles.searchIcon} source={require("./assets/icons/png/info.png")}/>
         </TouchableOpacity>
             </Modal>
+            <Modal
+          animationType="fade"
+          hardwareAccelerated
+          transparent
+          onRequestClose={()=>{}}
+          visible={this.state.videoVisible}
+          >
+          <View style={styles.screenCover}>
+
+          <VrVideoComponent
+          style={{top:-0.02*height,height:height*0.84,width:width*0.92,backgroundColor:'#000000'}}
+          video={{ uri:'https://d2v9y0dukr6mq2.cloudfront.net/video/preview/eG7t61g/underwater-coral-reef-360-vr_S94kBUa0__WM.mp4',
+                  type: 'stereo'}}
+          displayMode={'embedded'}
+          volume={1.0}
+          enableFullscreenButton
+          enableCardboardButton
+          enableTouchTracking
+          hidesTransitionView={false}
+          enableInfoButton={false} />
+                  </View>
+            </Modal>
+
           <View style={styles.square} />
 
 
@@ -238,11 +278,11 @@ export default class App extends React.Component {
               onPress={()=>{
               const handle = InteractionManager.createInteractionHandle()
               _mapView.animateToRegion({
-        latitude: 2.945895,
-        longitude: 101.870711,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421
-      },1460)
+                  latitude: 2.945895,
+                  longitude: 101.870711,
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421
+              },1460)
               setTimeout(()=>{
               InteractionManager.clearInteractionHandle(handle)
               },610)
@@ -256,7 +296,7 @@ export default class App extends React.Component {
 
         </Roulette>
         <TouchableWithoutFeedback
-         onPress={()=>{
+        onPress={()=>{
               const handle = InteractionManager.createInteractionHandle()
               _mapView.animateToRegion({
         latitude: 2.945895,
@@ -342,8 +382,8 @@ render(){
         ListEmptyComponent= { ()=>(
             <View  // Border
           style={styles.countryList}>
-               <Flag
-                 code={'a'}
+                <Flag
+                  code={'a'}
                  size={45}
                  style={styles.flag}
                />
@@ -468,6 +508,9 @@ const styles = StyleSheet.create({
   {
     width: 40,
     height: 40
+  },
+  screenCover:{
+    position: 'absolute',top: 0,left: 0,width,height,backgroundColor: 'rgba(236, 240, 241,0.5)',alignItems:'center',alignContent:'center',alignSelf:'center',justifyContent:'center'
   },
   rouletteBorder:{
     position: 'absolute',

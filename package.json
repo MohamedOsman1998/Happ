@@ -5,6 +5,8 @@
 	"scripts": {
 		"start": "node node_modules/react-native/local-cli/cli.js start",
 		"test": "jest",
+		"adb":"cd C:/Users/Mohamed/AppData/Local/Android/sdk/platform-tools",
+		"back":"cd F:/Repos/react-native-app/hirePro/Happ1/Happ",
 		"androidCustom": "react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res && react-native run-android"
 	},
 	"dependencies": {
