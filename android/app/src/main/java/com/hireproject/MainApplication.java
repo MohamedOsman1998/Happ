@@ -6,6 +6,12 @@ import android.os.Bundle;
 
 
 import com.facebook.react.ReactApplication;
+import com.brentvatne.react.ReactVideoPackage;
+import com.github.yamill.orientation.OrientationPackage;
+import com.airbnb.android.react.maps.MapsPackage;
+import com.vrvideocomponent.VrVideoViewPackage;
+import com.airbnb.android.react.lottie.LottiePackage;
+import com.github.yamill.orientation.OrientationPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.airbnb.android.react.lottie.LottiePackage;
 import com.airbnb.android.react.lottie.LottiePackage;
@@ -38,6 +44,12 @@ public class MainApplication extends Application implements ReactApplication ,Ap
       // if(mCurrentActivity==null)throw new ArithmeticException("dividing a number by 5 is not allowed in this program");
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactVideoPackage(),
+            new OrientationPackage(),
+            new MapsPackage(),
+            new VrVideoViewPackage(),
+            new LottiePackage(),
+            new OrientationPackage(),
             new MapsPackage(),
             new LottiePackage(),
             new VrVideoViewPackage()

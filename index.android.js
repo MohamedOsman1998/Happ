@@ -4,6 +4,7 @@ import {HireAppApi} from './constants/api';
 import renderIf from './renderIf';
 import {dayStyle,nightStyle} from './mapStyles';
 import InfoConditionalView from './InfoConditionalView.js'
+import Orientation from 'react-native-orientation';
 
 const hireAppApi = new HireAppApi();
 import {
@@ -125,6 +126,7 @@ export default class App extends React.Component {
 
 
   constructor(props) {
+    Orientation.lockToPortrait();
 
     super(props);
     this.state = {
@@ -150,15 +152,15 @@ export default class App extends React.Component {
     }
   }
   async componentWillMount(){
-    BackHandler.addEventListener('hardwareBackPress', ()=>{
-      console.log(this.state)
-      if (this.state.videoVisible) {
-        this.setState({videoVisible:false})
-        console.log(this.state);
-        return true;
-      }
-      return false;
-      });
+        BackHandler.addEventListener('hardwareBackPress', ()=>
+      // console.log(this.state)
+      // if (this.state.videoVisible) {
+      //   this.setState({videoVisible:false});
+      //   console.log(this.state);
+      //   return true;
+      // }
+       false
+      );
   }
   async componentDidMount() {
 
@@ -202,7 +204,10 @@ export default class App extends React.Component {
                 key={marker.id} coordinate={marker.latlng} title={marker.title}  description={marker.description}>
                 <Image ref="icon" source={id?tetrisBlocks.z:tetrisBlocks.b}style={{width:40,height:40}}/>
                 <MapView.Callout
-                onPress={()=>{this.setState({videoVisible:true})}}
+                onPress={()=>{
+                    Orientation.lockToLandscapeLeft();
+                  this.setState({videoVisible:true})
+                  }}
                 style={{width:250,height:200}}>
                   <CustomCallout marker={marker}style={{width:250,height:200}}/>
                 </MapView.Callout>
@@ -234,20 +239,24 @@ export default class App extends React.Component {
           animationType="fade"
           hardwareAccelerated
           transparent
-          onRequestClose={()=>{}}
+          onRequestClose={()=>{
+    Orientation.lockToPortrait();
+
+        this.setState({videoVisible:false});
+      }}
           visible={this.state.videoVisible}
           >
           <View style={styles.screenCover}>
 
           <VrVideoComponent
-          style={{top:-0.02*height,height:height*0.84,width:width*0.92,backgroundColor:'#000000'}}
+          style={{top:-0.027*width,height:width*0.84,width:height*0.92,backgroundColor:'#000'}}
           video={{ uri:'https://d2v9y0dukr6mq2.cloudfront.net/video/preview/eG7t61g/underwater-coral-reef-360-vr_S94kBUa0__WM.mp4',
                   type: 'stereo'}}
           displayMode={'embedded'}
           volume={1.0}
           enableFullscreenButton
           enableCardboardButton
-          enableTouchTracking
+          enableTouchTracking={false}
           hidesTransitionView={false}
           enableInfoButton={false} />
                   </View>
@@ -357,9 +366,9 @@ render(){
         data={data}
         style={styles.list}
 
-         initialNumToRender={100}
-         windowSize={200}
-         maxToRenderPerBatch={50}
+        initialNumToRender={100}
+        windowSize={200}
+        maxToRenderPerBatch={50}
         getItemCount={this.getItemCount}
         getItem={this.getItem}
         onScroll={(e)=>{
@@ -382,12 +391,12 @@ render(){
         ListEmptyComponent= { ()=>(
             <View  // Border
           style={styles.countryList}>
-                <Flag
-                  code={'a'}
-                 size={45}
-                 style={styles.flag}
-               />
-               </View>
+              <Flag
+                code={'a'}
+                size={45}
+                style={styles.flag}
+              />
+            </View>
         )}
         getItemLayout={(data,index)=>(
            {length: 48, offset: 48*index, index}
@@ -510,7 +519,7 @@ const styles = StyleSheet.create({
     height: 40
   },
   screenCover:{
-    position: 'absolute',top: 0,left: 0,width,height,backgroundColor: 'rgba(236, 240, 241,0.5)',alignItems:'center',alignContent:'center',alignSelf:'center',justifyContent:'center'
+    position: 'absolute',top: 0,left: 0,width:height,height:width,backgroundColor: 'rgba(71, 71, 71,1)',alignItems:'center',alignContent:'center',alignSelf:'center',justifyContent:'center'
   },
   rouletteBorder:{
     position: 'absolute',

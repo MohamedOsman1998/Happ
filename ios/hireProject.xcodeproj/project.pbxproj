@@ -56,6 +56,9 @@
 		C0EB09B2BDA740009B3D13EE /* MontserratAlternates-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D40C0ADA8FDE4230AB562E83 /* MontserratAlternates-SemiBoldItalic.ttf */; };
 		74925EAFC96E451CABBD7BA2 /* MontserratAlternates-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 610B933BBADF4E93A197E27B /* MontserratAlternates-Thin.ttf */; };
 		7C293A8684D24A369F0D7729 /* MontserratAlternates-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CD9BE7EE5FFA452FA5E93A38 /* MontserratAlternates-ThinItalic.ttf */; };
+		84C01C3A7F42479D9A04E19E /* libRCTOrientation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B8D2F5703EA549FDA2CB34B4 /* libRCTOrientation.a */; };
+		5C29CD48EB6347F985FDD7D3 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87683C85D78242C799DFC20A /* libRCTActionSheet.a */; };
+		7D0A90087A8F4BDE975081C5 /* libRCTVideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E0C26E7E66EC410D849B52FF /* libRCTVideo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -299,6 +302,12 @@
 		D40C0ADA8FDE4230AB562E83 /* MontserratAlternates-SemiBoldItalic.ttf */ = {isa = PBXFileReference; name = "MontserratAlternates-SemiBoldItalic.ttf"; path = "../assets/fonts/MontserratAlternates-SemiBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		610B933BBADF4E93A197E27B /* MontserratAlternates-Thin.ttf */ = {isa = PBXFileReference; name = "MontserratAlternates-Thin.ttf"; path = "../assets/fonts/MontserratAlternates-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		CD9BE7EE5FFA452FA5E93A38 /* MontserratAlternates-ThinItalic.ttf */ = {isa = PBXFileReference; name = "MontserratAlternates-ThinItalic.ttf"; path = "../assets/fonts/MontserratAlternates-ThinItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A9B571DF14BB4179912ECF6C /* RCTOrientation.xcodeproj */ = {isa = PBXFileReference; name = "RCTOrientation.xcodeproj"; path = "../node_modules/react-native-orientation/iOS/RCTOrientation.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		B8D2F5703EA549FDA2CB34B4 /* libRCTOrientation.a */ = {isa = PBXFileReference; name = "libRCTOrientation.a"; path = "libRCTOrientation.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		CB15F50B19BB4D3C9905A26E /* VrVideoComponent.xcodeproj */ = {isa = PBXFileReference; name = "VrVideoComponent.xcodeproj"; path = "../node_modules/react-android-360-video/ios/VrVideoComponent.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		87683C85D78242C799DFC20A /* libRCTActionSheet.a */ = {isa = PBXFileReference; name = "libRCTActionSheet.a"; path = "libRCTActionSheet.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		8F56862D13D3498DA2A5E10F /* RCTVideo.xcodeproj */ = {isa = PBXFileReference; name = "RCTVideo.xcodeproj"; path = "../node_modules/react-native-video/ios/RCTVideo.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		E0C26E7E66EC410D849B52FF /* libRCTVideo.a */ = {isa = PBXFileReference; name = "libRCTVideo.a"; path = "libRCTVideo.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -328,6 +337,9 @@
 				6ECEE98758D94BB7BBD77071 /* libAirMaps.a in Frameworks */,
 				8EDFB00FA0B14CF78612D5BB /* libLottie.a in Frameworks */,
 				2D475726249D4266B8F04249 /* libLottieReactNative.a in Frameworks */,
+				84C01C3A7F42479D9A04E19E /* libRCTOrientation.a in Frameworks */,
+				5C29CD48EB6347F985FDD7D3 /* libRCTActionSheet.a in Frameworks */,
+				7D0A90087A8F4BDE975081C5 /* libRCTVideo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -497,6 +509,9 @@
 				18A703CD58F54895A7A6BA5B /* AirMaps.xcodeproj */,
 				E0B100A1E0694EB3ADA04AD4 /* Lottie.xcodeproj */,
 				00E718F8AA9F49279A74CA5F /* LottieReactNative.xcodeproj */,
+				A9B571DF14BB4179912ECF6C /* RCTOrientation.xcodeproj */,
+				CB15F50B19BB4D3C9905A26E /* VrVideoComponent.xcodeproj */,
+				8F56862D13D3498DA2A5E10F /* RCTVideo.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1070,12 +1085,18 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-maps\lib\ios/**",
 					"$(SRCROOT)\..\node_modules\lottie-ios\lottie-ios\Classes/**",
 					"$(SRCROOT)\..\node_modules\lottie-react-native\lib\ios\LottieReactNative",
+					"$(SRCROOT)\..\node_modules\react-native-orientation\iOS\RCTOrientation/**",
+					"$(SRCROOT)\..\node_modules\react-android-360-video\ios\VrVideoComponent",
+					"$(SRCROOT)\..\node_modules\react-native-video\ios",
 				);
 			};
 			name = Debug;
@@ -1097,12 +1118,18 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-maps\lib\ios/**",
 					"$(SRCROOT)\..\node_modules\lottie-ios\lottie-ios\Classes/**",
 					"$(SRCROOT)\..\node_modules\lottie-react-native\lib\ios\LottieReactNative",
+					"$(SRCROOT)\..\node_modules\react-native-orientation\iOS\RCTOrientation/**",
+					"$(SRCROOT)\..\node_modules\react-android-360-video\ios\VrVideoComponent",
+					"$(SRCROOT)\..\node_modules\react-native-video\ios",
 				);
 			};
 			name = Release;
@@ -1127,6 +1154,9 @@
 					"$(SRCROOT)\..\node_modules\react-native-maps\lib\ios/**",
 					"$(SRCROOT)\..\node_modules\lottie-ios\lottie-ios\Classes/**",
 					"$(SRCROOT)\..\node_modules\lottie-react-native\lib\ios\LottieReactNative",
+					"$(SRCROOT)\..\node_modules\react-native-orientation\iOS\RCTOrientation/**",
+					"$(SRCROOT)\..\node_modules\react-android-360-video\ios\VrVideoComponent",
+					"$(SRCROOT)\..\node_modules\react-native-video\ios",
 				);
 			};
 			name = Debug;
@@ -1150,6 +1180,9 @@
 					"$(SRCROOT)\..\node_modules\react-native-maps\lib\ios/**",
 					"$(SRCROOT)\..\node_modules\lottie-ios\lottie-ios\Classes/**",
 					"$(SRCROOT)\..\node_modules\lottie-react-native\lib\ios\LottieReactNative",
+					"$(SRCROOT)\..\node_modules\react-native-orientation\iOS\RCTOrientation/**",
+					"$(SRCROOT)\..\node_modules\react-android-360-video\ios\VrVideoComponent",
+					"$(SRCROOT)\..\node_modules\react-native-video\ios",
 				);
 			};
 			name = Release;
@@ -1180,12 +1213,18 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-maps\lib\ios/**",
 					"$(SRCROOT)\..\node_modules\lottie-ios\lottie-ios\Classes/**",
 					"$(SRCROOT)\..\node_modules\lottie-react-native\lib\ios\LottieReactNative",
+					"$(SRCROOT)\..\node_modules\react-native-orientation\iOS\RCTOrientation/**",
+					"$(SRCROOT)\..\node_modules\react-android-360-video\ios\VrVideoComponent",
+					"$(SRCROOT)\..\node_modules\react-native-video\ios",
 				);
 			};
 			name = Debug;
@@ -1216,12 +1255,18 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-maps\lib\ios/**",
 					"$(SRCROOT)\..\node_modules\lottie-ios\lottie-ios\Classes/**",
 					"$(SRCROOT)\..\node_modules\lottie-react-native\lib\ios\LottieReactNative",
+					"$(SRCROOT)\..\node_modules\react-native-orientation\iOS\RCTOrientation/**",
+					"$(SRCROOT)\..\node_modules\react-android-360-video\ios\VrVideoComponent",
+					"$(SRCROOT)\..\node_modules\react-native-video\ios",
 				);
 			};
 			name = Release;
@@ -1247,6 +1292,9 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};
 			name = Debug;
@@ -1271,6 +1319,9 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};

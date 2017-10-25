@@ -17,6 +17,7 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.google.vr.sdk.widgets.video.VrVideoEventListener;
 import com.google.vr.sdk.widgets.video.VrVideoView;
 
+
 import java.io.IOException;
 
 /**
@@ -59,12 +60,15 @@ public class VrVideoViewManager extends SimpleViewManager<VrVideoView> {
         VrVideoView vrView = new VrVideoView(mActivity);
         vrView.setEventListener(new ActivityEventListener(vrView));
         vrView.pauseVideo();
-        return new VrVideoView(mActivity);
+        return vrView;
     }
 
     @ReactProp(name = PROP_VOLUME, defaultFloat = 1.0f)
     public void setVolume(final VrVideoView videoView, float volume) {
         videoView.setVolume(volume);
+        videoView.recenterHeadTracker();
+        videoView.resetHeadTracker();
+        videoView.setStereoModeEnabled();
         Log.d(TAG, "volume="+volume);
     }
 
@@ -114,11 +118,14 @@ public class VrVideoViewManager extends SimpleViewManager<VrVideoView> {
          switch (mode) {
             case "fullscreen":
                 videoView.setDisplayMode(VrVideoView.DisplayMode.FULLSCREEN_MONO);
+                break;
             case "cardboard":
                 videoView.setDisplayMode(VrVideoView.DisplayMode.FULLSCREEN_STEREO);
+                break;
                 case "embedded":
             default:
                 videoView.setDisplayMode(VrVideoView.DisplayMode.EMBEDDED);
+                break;
         }
     }
 
