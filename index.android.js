@@ -153,6 +153,7 @@ export default class App extends React.Component {
       videoVisible:false,
       splash: true,
       preSplash:true,
+      videoLoading:false,
       mapStyle:         dayStyle,
       markers: [marker1, marker2, marker3],
       // loading: false,
@@ -180,14 +181,14 @@ export default class App extends React.Component {
 
     setTimeout(()=>{
       this.setState({splash:false})
-    }, 5000);
+    }, 2000);
 
   }
   render() {
         if(this.state.preSplash){
       return(
         // <View style={styles.container}/>
-<SplashScreen start={1000}/>
+        <SplashScreen start={1000}/>
       )
     }
 
@@ -203,6 +204,10 @@ export default class App extends React.Component {
           <View style={{position:"absolute",width,height,zIndex:100}} >
           <SplashScreen/>
           </View>)}
+          {renderIf(this.state.videoLoading,
+              <View style={{position:"absolute",left:0,top:0,width:height*width,height:width*height,backgroundColor:'#212121',zIndex:1001}} />
+            )
+          }
         <MapView
         ref={(mapView) => { _mapView = mapView; }}
           showsCompass={false}
@@ -226,15 +231,20 @@ export default class App extends React.Component {
                 <Image ref="icon" source={id?tetrisBlocks.z:tetrisBlocks.b}style={{width:40,height:40}}/>
                 <MapView.Callout
                 onPress={()=>{
-                    Orientation.lockToLandscapeLeft();
-                  this.setState({videoVisible:true})
-                  }}
+
+                  this.setState({videoLoading:true},()=>{
+                    this.setState({videoVisible:true},()=>{
+                      Orientation.lockToLandscapeLeft();
+
+                    })
+                  })
+                }}
                 style={{width:250,height:200}}>
                   <CustomCallout marker={marker}style={{width:250,height:200}}/>
                 </MapView.Callout>
               </MapView.Marker>
 
-            ))}
+))}
         </MapView>
         <TouchableOpacity style={styles.searchIconWrapper}
           onPress={()=>{this.setState({modalVisible:!this.state.modalVisible})}}>
@@ -256,15 +266,16 @@ export default class App extends React.Component {
           <Image style={styles.searchIcon} source={require("./assets/icons/png/info.png")}/>
           </TouchableOpacity>
             </Modal>
+
             <Modal
           animationType="fade"
           hardwareAccelerated
           transparent={false}
           onRequestClose={()=>{
-    Orientation.lockToPortrait();
+            Orientation.lockToPortrait();
 
-        this.setState({videoVisible:false});
-      }}
+            this.setState({videoVisible:false});
+          }}
           visible={this.state.videoVisible}
           >
 
@@ -274,7 +285,8 @@ export default class App extends React.Component {
             horizontal>
         <View style={{marginLeft:10}}>
         <TouchableOpacity
-          onPress={()=>{this.refs.videoScrollView.scrollToEnd({animated:true})}}
+          onPress={()=>{
+            this.refs.videoScrollView.scrollToEnd({animated:true})}}
                   style={{
                   width:30,
                   height:47,
@@ -297,12 +309,17 @@ export default class App extends React.Component {
         rate={1.0}                              // 0 is paused, 1 is normal.
         volume={1.0}                            // 0 is muted, 1 is normal.
         muted={false}                           // Mutes the audio entirely.
+        onLoad={()=>{
+          this.setState({videoLoading:false})
+        }}
         paused={false}                          // Pauses playback entirely.
         resizeMode="cover"                      // Fill the whole screen at aspect ratio.*
         onEnd={()=>{
+          this.player.seek(0);
           console.log(this.refs);
+          // this.player.seek(0);
           this.refs.videoScrollView.scrollToEnd({animated: true})}}
-        repeat                          // Repeat forever.
+        repeat={false}                          // Repeat forever.
         playInBackground={false}                // Audio continues to play when app entering background.
         playWhenInactive={false}                // [iOS] Video continues to play when control or notification center are shown.
         ignoreSilentSwitch={"ignore"}           // [iOS] ignore | obey - When 'ignore', audio will still play with the iOS hard silent switch set to silent. When 'obey', audio will toggle with the switch. When not specified, will inherit audio settings as usual.
@@ -313,7 +330,9 @@ export default class App extends React.Component {
 
         <TouchableOpacity
         onPress={()=>{
-          this.refs.videoScrollView.scrollTo({x: 0.0, y: 0.0, animated: true})}}
+          this.refs.videoScrollView.scrollTo({x: 0.0, y: 0.0, animated: true})
+          this.player.seek(0);
+        }}
 
           style={{width:30,height:47,position:"absolute",left:-0.068*height,top:width*0.42-28,}}
         >

@@ -55,19 +55,21 @@ if(!this.props.start){
       this.state.loading.setValue(0)
       Animated.timing(this.state.loading, {
         toValue: 1,
-        duration: 2500,
+        duration: 2000,
       }).start(
-        //  ()=>{
-          //   this.state.loading.setValue(0)
-          //     Animated.timing(this.state.loading, {
-            //   toValue: 1,
-            //   duration: 2500,
-            // }).start(()=>{
+         ()=>{
+            this.state.loading.setValue(0)
+              Animated.timing(this.state.loading, {
+              toValue: 1,
+              duration: 2500,
+            }).start(
+              // ()=>{
               //   this.state.loading.setValue(0)
               //     Animated.timing(this.state.loading, {
                 //   toValue: 1,
                 //   duration: 2500,
-                // }).start()})}
+                // }).start()}
+              )}
               )}
             );
           }
