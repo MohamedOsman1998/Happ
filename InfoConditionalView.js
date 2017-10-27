@@ -1,13 +1,29 @@
 import renderIf from './renderIf';
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, Dimensions } from 'react-native';
-const {width, height} = Dimensions.get("window");
+import { StyleSheet, Text, View, Image,TouchableWithoutFeedback, Dimensions } from 'react-native';
+let {width, height} = Dimensions.get("window");
 const helperImages = {
     roulette: require('./assets/icons/png/roulette.png'),
     country: require('./assets/icons/png/country.png'),
     legend: require('./assets/icons/png/legend.png'),
 }
+let temp=0;
+if(width>height){
+    temp=width;
+    width=height;
+    height=temp;
+}
 export default class InfoConditionalView extends Component {
+    constructor(props){
+        super(props);
+        // if(width>height){
+        //     temp=width;
+        //     width=height;
+        //     height=temp;
+        // }
+        console.log("h",height,"w",width );
+            this.props=props;
+    }
     shouldComponentUpdate() {
         console.log(this.refs.vlist, "f");
         return false;
@@ -15,7 +31,12 @@ export default class InfoConditionalView extends Component {
     render() {
         return (
             <View style={{position:"absolute"}}>
+            <TouchableWithoutFeedback
+            style={ styles.screenCover }
+            onPress={()=>{this.props.fn()}}>
+
                 <View style={ styles.screenCover }></View>
+            </TouchableWithoutFeedback>
                 <Image
                 style={styles.roulette}
                 source={helperImages.roulette}

@@ -66,9 +66,6 @@ public class VrVideoViewManager extends SimpleViewManager<VrVideoView> {
     @ReactProp(name = PROP_VOLUME, defaultFloat = 1.0f)
     public void setVolume(final VrVideoView videoView, float volume) {
         videoView.setVolume(volume);
-        videoView.recenterHeadTracker();
-        videoView.resetHeadTracker();
-        videoView.setStereoModeEnabled();
         Log.d(TAG, "volume="+volume);
     }
 

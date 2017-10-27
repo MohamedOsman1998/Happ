@@ -2,28 +2,40 @@ import React from 'react';
 import { Animated,StyleSheet,Dimensions ,Text,Image,View} from 'react-native';
 import Animation from 'lottie-react-native';
 
-const {width, height} = Dimensions.get("window");
+let {width, height} = Dimensions.get("window");
+let temp=0;
+if(width>height){
+  temp=width;
+  width=height;
+  height=temp;
+  }
 
 export default class splash extends React.Component {
   constructor(props) {
     super(props);
+    if(width>height){
+      temp=width;
+      width=height;
+      height=temp;
+      }
+      this.props=props;
     this.state = {
       progress: new Animated.Value(0),
-      loading:new Animated.Value(0)
+      loading:new Animated.Value(this.props.start?this.props.start/2000:0)
     };
   }
 
   componentDidMount() {
-    Animated.timing(this.state.progress, {
-      toValue: 1,
-      duration: 2500,
-    }).start(()=>{
-      this.state.progress.setValue(0)
-      Animated.timing(this.state.progress, {
-      toValue: 1,
-      duration: 2500,
-    }).start()});
-    
+    // Animated.timing(this.state.progress, {
+    //   toValue: 1,
+    //   duration: 2500,
+    // }).start(()=>{
+    //   this.state.progress.setValue(0)
+    //   Animated.timing(this.state.progress, {
+    //   toValue: 1,
+    //   duration: 2500,
+    // }).start()});
+
     // this.i=-1;
     // this.loadingFun=()=>{
     //     this.state.loading.setValue(0)
@@ -34,26 +46,32 @@ export default class splash extends React.Component {
     //   }).start(this.i<0?this.loadingFun:()=>{})}
     //   this.loadingFun()
 
-    Animated.timing(this.state.loading, {
+if(!this.props.start){
+  Animated.timing(this.state.loading, {
+    toValue: 1,
+    duration: 2000,
+  }).start(
+    ()=>{
+      this.state.loading.setValue(0)
+      Animated.timing(this.state.loading, {
         toValue: 1,
         duration: 2500,
-      }).start(()=>{
-        this.state.loading.setValue(0)
-          Animated.timing(this.state.loading, {
-        toValue: 1,
-        duration: 2500,
-      }).start(()=>{
-        this.state.loading.setValue(0)
-          Animated.timing(this.state.loading, {
-        toValue: 1,
-        duration: 2500,
-      }).start(()=>{
-        this.state.loading.setValue(0)
-          Animated.timing(this.state.loading, {
-        toValue: 1,
-        duration: 2500,
-      }).start()})})});
-  }
+      }).start(
+        //  ()=>{
+          //   this.state.loading.setValue(0)
+          //     Animated.timing(this.state.loading, {
+            //   toValue: 1,
+            //   duration: 2500,
+            // }).start(()=>{
+              //   this.state.loading.setValue(0)
+              //     Animated.timing(this.state.loading, {
+                //   toValue: 1,
+                //   duration: 2500,
+                // }).start()})}
+              )}
+            );
+          }
+          }
 
   render() {
     return (
@@ -64,7 +82,7 @@ export default class splash extends React.Component {
             <View style={styles.textWrapper}>
                 <Text style={styles.text}>App Name</Text>
             </View>
-      <Animation
+      {/* <Animation
         style={{
           width: 100,
           height: 100,
@@ -74,7 +92,8 @@ export default class splash extends React.Component {
         }}
         source={require('./assets/animations/location.json')}
         progress={this.state.progress}
-      />
+      /> */}
+
       <Animation
         style={{
           width: 100,
@@ -109,7 +128,7 @@ const styles = StyleSheet.create({
     // right:100
   },
   appIcon:{
-    
+
       justifyContent:'center',
       alignContent:'center',
             width:150,

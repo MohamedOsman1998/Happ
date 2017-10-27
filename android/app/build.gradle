@@ -133,6 +133,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-video')
     compile project(':react-android-360-video')
     compile project(':lottie-react-native')
     compile project(':react-native-maps')

@@ -11,7 +11,6 @@ import com.github.yamill.orientation.OrientationPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.vrvideocomponent.VrVideoViewPackage;
 import com.airbnb.android.react.lottie.LottiePackage;
-import com.github.yamill.orientation.OrientationPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.airbnb.android.react.lottie.LottiePackage;
 import com.airbnb.android.react.lottie.LottiePackage;
@@ -45,14 +44,10 @@ public class MainApplication extends Application implements ReactApplication ,Ap
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new ReactVideoPackage(),
-            new OrientationPackage(),
             new MapsPackage(),
             new VrVideoViewPackage(),
-            new LottiePackage(),
             new OrientationPackage(),
-            new MapsPackage(),
-            new LottiePackage(),
-            new VrVideoViewPackage()
+            new LottiePackage()
       );
     }
   };

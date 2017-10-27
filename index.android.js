@@ -4,13 +4,13 @@ import {HireAppApi} from './constants/api';
 import renderIf from './renderIf';
 import {dayStyle,nightStyle} from './mapStyles';
 import InfoConditionalView from './InfoConditionalView.js'
-import Orientation from 'react-native-orientation';
 
 const hireAppApi = new HireAppApi();
 import {
   AppRegistry,
   StyleSheet,
   Text,
+  ScrollView,
   View,
   InteractionManager,
   VirtualizedList,
@@ -28,6 +28,10 @@ import MapView from 'react-native-maps';
 import Flag from './Flag.js'
 import SplashScreen from './SplashScreen.js'
 import VrVideoComponent from './assets/react-android-360-video/VrVideo360';
+import Video from 'react-native-video'
+import VideoPlayer from 'react-native-video-controls';
+import Orientation from 'react-native-orientation';
+
 const TimerMixin = require('react-timer-mixin');
 
 
@@ -70,8 +74,16 @@ const countryList=[
   'gibraltar',
   'greece',
 ]
-const {width, height } = Dimensions.get("window");
+let {width, height } = Dimensions.get("window");
+let temp=0;
 
+if(width>height){
+temp=width;
+width=height;
+height=temp;
+}
+const rightArrow=require("./assets/icons/png/right_arrow.png");
+const leftArrow=require("./assets/icons/png/left-arrow.png")
 const CARD_HEIGHT = height / 2;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 const tetrisBlocks = {
@@ -126,17 +138,24 @@ export default class App extends React.Component {
 
 
   constructor(props) {
+
     Orientation.lockToPortrait();
 
+    if(width>height){
+      temp=width;
+      width=height;
+      height=temp;
+      }
+      // console.log("h",height,"w",width );
     super(props);
     this.state = {
       modalVisible: false,
       videoVisible:false,
       splash: true,
+      preSplash:true,
       mapStyle:         dayStyle,
       markers: [marker1, marker2, marker3],
-      loading: false,
-      hireapp: [],
+      // loading: false,
     };
     this.onRegionChange = this
       .onRegionChange
@@ -152,36 +171,38 @@ export default class App extends React.Component {
     }
   }
   async componentWillMount(){
-        BackHandler.addEventListener('hardwareBackPress', ()=>
-      // console.log(this.state)
-      // if (this.state.videoVisible) {
-      //   this.setState({videoVisible:false});
-      //   console.log(this.state);
-      //   return true;
-      // }
-       false
-      );
+        BackHandler.addEventListener('hardwareBackPress', ()=>false);
   }
   async componentDidMount() {
+    setTimeout(()=>{
+      this.setState({preSplash:false})
+    }, 200);
 
     setTimeout(()=>{
       this.setState({splash:false})
-    }, 500);
-    // const data = await this.props.hireAppApi.TetrisList();
-    // this.setState({loading: true});
-    // this.setState({loading: false, hireapp: data});
+    }, 5000);
+
   }
   render() {
-        if(this.state.splash){
+        if(this.state.preSplash){
       return(
-        <SplashScreen/>
+        // <View style={styles.container}/>
+<SplashScreen start={1000}/>
       )
     }
 
     return (
 
       <View style={styles.container}>
-
+          {/* hardwareAccelerated
+          transparent
+          onRequestClose={()=>{this.setState({splash:false})}}
+          visible={this.state.splash}
+          animationType="fade" */}
+          {renderIf(this.state.splash,
+          <View style={{position:"absolute",width,height,zIndex:100}} >
+          <SplashScreen/>
+          </View>)}
         <MapView
         ref={(mapView) => { _mapView = mapView; }}
           showsCompass={false}
@@ -226,19 +247,19 @@ export default class App extends React.Component {
           animationType="fade"
           hardwareAccelerated
           transparent
-          onRequestClose={()=>{}}
+          onRequestClose={()=>{this.setState({modalVisible:false})}}
           visible={this.state.modalVisible}
           >
-                    <InfoConditionalView style={{position:"absolute"}}/>
+                    <InfoConditionalView fn={()=>{this.setState({modalVisible:false})}}style={{position:"absolute"}}/>
           <TouchableOpacity style={styles.searchIconWrapper}
           onPress={()=>{this.setState({modalVisible:!this.state.modalVisible})}}>
           <Image style={styles.searchIcon} source={require("./assets/icons/png/info.png")}/>
-        </TouchableOpacity>
+          </TouchableOpacity>
             </Modal>
             <Modal
           animationType="fade"
           hardwareAccelerated
-          transparent
+          transparent={false}
           onRequestClose={()=>{
     Orientation.lockToPortrait();
 
@@ -246,20 +267,81 @@ export default class App extends React.Component {
       }}
           visible={this.state.videoVisible}
           >
-          <View style={styles.screenCover}>
 
-          <VrVideoComponent
-          style={{top:-0.027*width,height:width*0.84,width:height*0.92,backgroundColor:'#000'}}
+            <ScrollView
+            ref="videoScrollView"
+            contentContainerStyle={styles.screenCover}
+            horizontal>
+        <View style={{marginLeft:10}}>
+        <TouchableOpacity
+          onPress={()=>{this.refs.videoScrollView.scrollToEnd({animated:true})}}
+                  style={{
+                  width:30,
+                  height:47,
+                  position:"absolute",
+                  alignSelf:"center",
+                  top:width*0.42-28,
+                  left:0.92*height}}
+                  >
+                  <Image
+                    style={{ width:30,height:47}}
+                    source={rightArrow}
+                  />
+                  </TouchableOpacity>
+
+          <Video style={{top:-0.027*width,height:width*0.868,width:height*0.90,backgroundColor:'#000'}}
+          source={{ uri: 'https://vjs.zencdn.net/v/oceans.mp4' }}   // Can be a URL or a local file.
+        ref={(ref) => {
+          this.player = ref
+        }}                                      // Store reference
+        rate={1.0}                              // 0 is paused, 1 is normal.
+        volume={1.0}                            // 0 is muted, 1 is normal.
+        muted={false}                           // Mutes the audio entirely.
+        paused={false}                          // Pauses playback entirely.
+        resizeMode="cover"                      // Fill the whole screen at aspect ratio.*
+        onEnd={()=>{
+          console.log(this.refs);
+          this.refs.videoScrollView.scrollToEnd({animated: true})}}
+        repeat                          // Repeat forever.
+        playInBackground={false}                // Audio continues to play when app entering background.
+        playWhenInactive={false}                // [iOS] Video continues to play when control or notification center are shown.
+        ignoreSilentSwitch={"ignore"}           // [iOS] ignore | obey - When 'ignore', audio will still play with the iOS hard silent switch set to silent. When 'obey', audio will toggle with the switch. When not specified, will inherit audio settings as usual.
+        />
+          </View>
+
+        <View style={{marginRight:10}}>
+
+        <TouchableOpacity
+        onPress={()=>{
+          this.refs.videoScrollView.scrollTo({x: 0.0, y: 0.0, animated: true})}}
+
+          style={{width:30,height:47,position:"absolute",left:-0.068*height,top:width*0.42-28,}}
+        >
+        <Image source={leftArrow}
+          style={{ width:30,height:47}}
+        />
+        </TouchableOpacity>
+            <VrVideoComponent
+          style={{top:-0.0315*width,height:width*0.868,width:height*0.90,backgroundColor:'#000'}}
           video={{ uri:'https://d2v9y0dukr6mq2.cloudfront.net/video/preview/eG7t61g/underwater-coral-reef-360-vr_S94kBUa0__WM.mp4',
-                  type: 'stereo'}}
+          type: 'stereo'}}
           displayMode={'embedded'}
           volume={1.0}
-          enableFullscreenButton
-          enableCardboardButton
-          enableTouchTracking={false}
+          enableFullscreenButton={false}
+          enableCardboardButton={false}
+          enableTouchTracking
           hidesTransitionView={false}
-          enableInfoButton={false} />
-                  </View>
+        enableInfoButton={false} />
+          </View>
+
+        </ScrollView>
+        <TouchableOpacity
+          style={{position:"absolute",left:height-44,top:7,width:37,height:37}}
+          onPress={()=>{
+            Orientation.lockToPortrait();
+            this.setState({videoVisible:false})}}>
+            <Image style={{width:37,height:37}} source={require("./assets/icons/png/004-cross-button-1.png")}/>
+          </TouchableOpacity>
             </Modal>
 
           <View style={styles.square} />
@@ -304,7 +386,13 @@ export default class App extends React.Component {
             ))}
 
         </Roulette>
-        <TouchableWithoutFeedback
+        <TouchableOpacity
+        style={{
+          width: 43,
+          height: 43,
+          position: 'absolute',
+          bottom: 0
+        }}
         onPress={()=>{
               const handle = InteractionManager.createInteractionHandle()
               _mapView.animateToRegion({
@@ -322,7 +410,7 @@ export default class App extends React.Component {
           position: 'absolute',
           bottom: 0
         }}/>
-      </TouchableWithoutFeedback>
+      </TouchableOpacity>
 
       </View>
     );
@@ -366,9 +454,9 @@ render(){
         data={data}
         style={styles.list}
 
-        initialNumToRender={100}
+        initialNumToRender={200}
         windowSize={200}
-        maxToRenderPerBatch={50}
+        maxToRenderPerBatch={200}
         getItemCount={this.getItemCount}
         getItem={this.getItem}
         onScroll={(e)=>{
@@ -385,8 +473,8 @@ render(){
             setTimeout(()=>{scrollFlagTop=false},350)
           }
         }}
-        updateCellsBatchingPeriod={850}
-        initialScrollIndex={30}
+        updateCellsBatchingPeriod={100}
+        initialScrollIndex={1}
         keyExtractor={(item, index) => index}
         ListEmptyComponent= { ()=>(
             <View  // Border
@@ -490,7 +578,7 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#212121',
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -519,7 +607,7 @@ const styles = StyleSheet.create({
     height: 40
   },
   screenCover:{
-    position: 'absolute',top: 0,left: 0,width:height,height:width,backgroundColor: 'rgba(71, 71, 71,1)',alignItems:'center',alignContent:'center',alignSelf:'center',justifyContent:'center'
+    position: 'absolute',top: 0,left: 0,width:height*2.17,height:width,backgroundColor: 'rgba(71, 71, 71,1)',alignItems:'center',alignContent:'center',alignSelf:'center',justifyContent:'space-between'
   },
   rouletteBorder:{
     position: 'absolute',

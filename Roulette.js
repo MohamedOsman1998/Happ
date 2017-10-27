@@ -2,10 +2,21 @@ import React, {Component, PropTypes, Children} from 'react';
 import {View, Animated,Dimensions, PanResponder, StyleSheet, Easing} from 'react-native';
 
 import RouletteItem from './RouletteItem';
- var {height, width} = Dimensions.get('window');
+ let {height, width} = Dimensions.get('window');
+ let temp=0;
+ if(width>height){
+  temp=width;
+  width=height;
+  height=temp;
+  }
  class Roulette extends Component {
 
   constructor(props) {
+    if(width>height){
+      temp=width;
+      width=height;
+      height=temp;
+      }
     super(props);
     this.state = {
       _animatedValue: new Animated.Value(0),
@@ -15,7 +26,7 @@ import RouletteItem from './RouletteItem';
       gestureActive:false,
       gestureOffset:0,
     }
-    let animationFun = Animated.event([
+    const animationFun = Animated.event([
       null, {
         moveX: this.state._animatedValue
       }
@@ -30,7 +41,7 @@ import RouletteItem from './RouletteItem';
         animationFun(n, arg)
       },
        onPanResponderGrant: (evt, gestureState) => {
-        // The gesture has started. 
+        // The gesture has started.
         // gestureState.d{x,y} will be set to zero now
           console.log("grans")
           const {children} = this.props;
@@ -40,7 +51,7 @@ import RouletteItem from './RouletteItem';
           // this.gestureVars.gestureOffset=prevActiveItem*width/2-gestureState.moveX
           this.gestureVars.gestureOffset=this.state._animatedValue._value*width/2-gestureState.moveX;
           this.state._animatedValue.stopAnimation()
-          
+
           // console.log(this,width)
       },
       onPanResponderRelease: (evt, gestureState) => {
@@ -60,25 +71,25 @@ import RouletteItem from './RouletteItem';
               speed:18,
               bounciness:19,
             },).start();
-            
+
           }else if(gestureState.vx<1.3){
             console.log("sec")
            console.log(this.state._animatedValue._value%children.length+(gestureState.vx*6)*sign)
-           
+
              nextItem=Math.round(this.state._animatedValue._value+(gestureState.vx*6)*sign);
             Animated.timing(this.state._animatedValue, {
               toValue: nextItem,
               duration:3000,
               easing: Easing.out(Easing.exp),
             },).start();
-            
-          }else { 
+
+          }else {
             nextItem = Math.round(this.state._animatedValue._value + (gestureState.vx*13)*sign );//make this dependant on velocity and do direction and ignore small dx's
            console.log("last")
            console.log((gestureState.vx))
-           
+
           // this
-          //   .state//becoz it might be out of range becoz of prev anim 
+          //   .state//becoz it might be out of range becoz of prev anim
           //   ._animatedValue
           //   .setValue(activeItem);
           Animated.timing(this.state._animatedValue, {
@@ -149,8 +160,8 @@ import RouletteItem from './RouletteItem';
 
     return (
       <Animated.View
-      renderToHardwareTextureAndroid={true}
-      shouldRasterizeIOS={true}
+      renderToHardwareTextureAndroid
+      shouldRasterizeIOS
         {...this.panResponder.panHandlers}
         style={[
         styles.container, {
@@ -166,13 +177,13 @@ import RouletteItem from './RouletteItem';
         },
         customStyle
       ]}>
-        {Children.map(children, (child, index) => <RouletteItem
+        {Children.map(children, (child, index) => (<RouletteItem
           item={child}
           index={index}
           radius={radius}
           step={this.step}
           distance={distance}
-          rouletteRotate={rouletteRotate}/>)}
+          rouletteRotate={rouletteRotate}/>))}
         {renderCenter() || this.renderDefaultCenter()}
       </Animated.View>
     );
