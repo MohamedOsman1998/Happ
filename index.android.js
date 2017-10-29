@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Roulette from './Roulette';
 import {HireAppApi} from './constants/api';
 import renderIf from './renderIf';
-import {dayStyle,nightStyle} from './mapStyles';
+import {dayStyle} from './mapStyles';
 import InfoConditionalView from './InfoConditionalView.js'
 
 const hireAppApi = new HireAppApi();
@@ -15,7 +15,6 @@ import {
   InteractionManager,
   VirtualizedList,
   Image,
-  TouchableWithoutFeedback,
   WebView,
   Modal,
   BackHandler,
@@ -205,7 +204,7 @@ export default class App extends React.Component {
           <SplashScreen/>
           </View>)}
           {renderIf(this.state.videoLoading,
-              <View style={{position:"absolute",left:0,top:0,width:height*width,height:width*height,backgroundColor:'#212121',zIndex:1001}} />
+              <View style={{position:"absolute",left:0,top:0,width:height*width,height:width*height,backgroundColor:'rgba(71, 71, 71,1)',zIndex:1001}} />
             )
           }
         <MapView
@@ -278,12 +277,17 @@ export default class App extends React.Component {
           }}
           visible={this.state.videoVisible}
           >
-
+          {renderIf(this.state.videoLoading,
+              <View style={{position:"absolute",left:0,top:0,width:height,height:width,backgroundColor:'rgba(71, 71, 71,1)',zIndex:1001,justifyContent:"center",alignContent:"center"}} >
+              <Text style={{fontFamily:"MontserratAlternates-ExtraLight",color:'white',fontSize:35,alignSelf:"center"}}>Loading</Text>
+              </View>
+            )
+          }
             <ScrollView
             ref="videoScrollView"
             contentContainerStyle={styles.screenCover}
             horizontal>
-        <View style={{marginLeft:10}}>
+        <View style={{marginLeft:15}}>
         <TouchableOpacity
           onPress={()=>{
             this.refs.videoScrollView.scrollToEnd({animated:true})}}
@@ -309,14 +313,16 @@ export default class App extends React.Component {
         rate={1.0}                              // 0 is paused, 1 is normal.
         volume={1.0}                            // 0 is muted, 1 is normal.
         muted={false}                           // Mutes the audio entirely.
-        onLoad={()=>{
-          this.setState({videoLoading:false})
+        onProgress={(t)=>{
+          // console.log(t)
+          if(this.state.videoLoading&&t.currentTime>0.2)this.setState({videoLoading:false})
         }}
         paused={false}                          // Pauses playback entirely.
         resizeMode="cover"                      // Fill the whole screen at aspect ratio.*
         onEnd={()=>{
           this.player.seek(0);
-          console.log(this.refs);
+          // console.log(this.refs);
+
           // this.player.seek(0);
           this.refs.videoScrollView.scrollToEnd({animated: true})}}
         repeat={false}                          // Repeat forever.
@@ -326,7 +332,7 @@ export default class App extends React.Component {
         />
           </View>
 
-        <View style={{marginRight:10}}>
+        <View style={{marginRight:15}}>
 
         <TouchableOpacity
         onPress={()=>{
@@ -370,13 +376,22 @@ export default class App extends React.Component {
           style={styles.rouletteBorder}/>
 
         <Roulette
+
           customStyle={styles.rouletteStyle}
           customCenterStyle={styles.rouletteCenter}
           rouletteRotate={30}
           enableUserRotate
+          onRouletteEnd={()=>{
+            _mapView.animateToRegion({
+                  latitude: 2.945895,
+                  longitude: 101.870711,
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421
+              },1460)
+          }}
           radius={200}
-          distance={73}
-          onRotate={(props) => console.log(props)}>
+          distance={73}>
+
           {Object
             .keys(tetrisBlocks)
             .map(key => (
@@ -456,7 +471,7 @@ class LoopingListView extends React.Component{
     return data.getElementAtIndex(index)
   }
   componentWillUpdate(){
-    console.log("list")
+    // console.log("list")
   }
   shouldComponentUpdate(){
     return false;

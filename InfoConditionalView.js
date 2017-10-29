@@ -21,11 +21,11 @@ export default class InfoConditionalView extends Component {
         //     width=height;
         //     height=temp;
         // }
-        console.log("h",height,"w",width );
+        // console.log("h",height,"w",width );
             this.props=props;
     }
     shouldComponentUpdate() {
-        console.log(this.refs.vlist, "f");
+        // console.log(this.refs.vlist, "f");
         return false;
     }
     render() {

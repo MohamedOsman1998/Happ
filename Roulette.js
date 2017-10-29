@@ -19,6 +19,7 @@ import RouletteItem from './RouletteItem';
       }
     super(props);
     this.state = {
+      isReleased:true,
       _animatedValue: new Animated.Value(0),
       // activeItem: 0,
     };
@@ -43,14 +44,16 @@ import RouletteItem from './RouletteItem';
        onPanResponderGrant: (evt, gestureState) => {
         // The gesture has started.
         // gestureState.d{x,y} will be set to zero now
-          console.log("grans")
+          // console.log("grans")
           const {children} = this.props;
 
           // let prevActiveItem=this.state.activeItem-1<1?children.length:this.state.activeItem-1;
 
           // this.gestureVars.gestureOffset=prevActiveItem*width/2-gestureState.moveX
           this.gestureVars.gestureOffset=this.state._animatedValue._value*width/2-gestureState.moveX;
-          this.state._animatedValue.stopAnimation()
+          this.setState({isReleased:false},()=>{
+            this.state._animatedValue.stopAnimation()
+          })
 
           // console.log(this,width)
       },
@@ -61,10 +64,12 @@ import RouletteItem from './RouletteItem';
           const {children} = this.props;
           // const {activeItem} = this.state;//dont need activeItem anymore
           const sign=gestureState.vx>0?1:-1;
-          console.log(gestureState.vx)
+          // console.log(gestureState.vx)
           gestureState.vx=Math.abs(gestureState.vx)
+          this.setState({isReleased:true})
+
           if(gestureState.vx<0.4){
-            console.log("first")
+            // console.log("first")
              nextItem=Math.round(this.state._animatedValue._value);
             Animated.spring(this.state._animatedValue, {
               toValue: nextItem,
@@ -73,20 +78,20 @@ import RouletteItem from './RouletteItem';
             },).start();
 
           }else if(gestureState.vx<1.3){
-            console.log("sec")
-           console.log(this.state._animatedValue._value%children.length+(gestureState.vx*6)*sign)
+          //   console.log("sec")
+          //  console.log(this.state._animatedValue._value%children.length+(gestureState.vx*6)*sign)
 
              nextItem=Math.round(this.state._animatedValue._value+(gestureState.vx*6)*sign);
             Animated.timing(this.state._animatedValue, {
               toValue: nextItem,
               duration:3000,
               easing: Easing.out(Easing.exp),
-            },).start();
+            },).start(()=>{if(this.state.isReleased)this.props.onRouletteEnd&&this.props.onRouletteEnd()});
 
           }else {
             nextItem = Math.round(this.state._animatedValue._value + (gestureState.vx*13)*sign );//make this dependant on velocity and do direction and ignore small dx's
-           console.log("last")
-           console.log((gestureState.vx))
+          //  console.log("last")
+          //  console.log((gestureState.vx))
 
           // this
           //   .state//becoz it might be out of range becoz of prev anim
@@ -97,18 +102,19 @@ import RouletteItem from './RouletteItem';
             duration:gestureState.vx*3100>9000?9000:gestureState.vx*3100,
             easing: Easing.out(Easing.poly(3)),
             //  useNativeDriver: true, //try this
-          },).start();
+          },).start(()=>{if(this.state.isReleased)this.props.onRouletteEnd&&this.props.onRouletteEnd()});
 
         }
-        console.log(nextItem,this.state._animatedValue._value)
+        // console.log(nextItem,this.state._animatedValue._value)
       //     const newActiveItem = (nextItem % children.length)+1
       //  handlerOfRotate(children[children.length - newActiveItem].props);
         }
       }
     });
   }
+
   componentWillUpdate(){
-    console.log("rouletteUpdated")
+    // console.log("rouletteUpdated")
   }
   shouldComponentUpdate(){
     return false;
