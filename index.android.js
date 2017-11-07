@@ -285,11 +285,13 @@ export default class App extends React.Component {
           }
             <ScrollView
             ref="videoScrollView"
+            scrollEnabled={false}
             contentContainerStyle={styles.screenCover}
             horizontal>
         <View style={{marginLeft:15}}>
         <TouchableOpacity
           onPress={()=>{
+            this.player.setNativeProps({volume:0});
             this.refs.videoScrollView.scrollToEnd({animated:true})}}
                   style={{
                   width:30,
@@ -336,7 +338,8 @@ export default class App extends React.Component {
 
         <TouchableOpacity
         onPress={()=>{
-          this.refs.videoScrollView.scrollTo({x: 0.0, y: 0.0, animated: true})
+            this.player.setNativeProps({volume:1});
+            this.refs.videoScrollView.scrollTo({x: 0.0, y: 0.0, animated: true})
           this.player.seek(0);
         }}
 
