@@ -1,7 +1,8 @@
-Travel and Tourism app written in react native
+React Native travel and Tourism app
 ===================
 
-The app displays points of intrest from the endpoint on a map. It is able to display information per endpoint as well as conventional and 360 videos
+The app displays points of intrest from the endpoint on a map.
+It is able to display information per endpoint as well as view conventional and 360 videos
 ----------
 
 
